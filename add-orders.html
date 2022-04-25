@@ -63,19 +63,19 @@
                 <td class="align-middle">#05236598</td>
                 <td class="align-middle">Dalgona</td>
                 <td class="align-middle">Php. 425</td>
-                <td class="align-middle"> <button type="button" name="button" class="btn btn-primary"><i class="bi bi-plus-circle-fill"></i></button> </td>
+                <td class="align-middle"> <button type="button" name="button" onclick="orderName('Dalgona')" class="btn btn-primary"><i class="bi bi-plus-circle-fill"></i></button> </td>
               </tr>
               <tr>
                 <td class="align-middle">#04063521</td>
                 <td class="align-middle">Lychee Aide</td>
                 <td class="align-middle">Php. 500</td>
-                <td class="align-middle"> <button type="button" name="button" class="btn btn-primary"><i class="bi bi-plus-circle-fill"></i></button> </td>
+                <td class="align-middle"> <button type="button" name="button" onclick="orderName('Lychee Ade')" class="btn btn-primary"><i class="bi bi-plus-circle-fill"></i></button> </td>
               </tr>
               <tr>
                 <td class="align-middle">#07359144</td>
                 <td class="align-middle">Espresso</td>
                 <td class="align-middle">Php. 250</td>
-                <td class="align-middle"> <button type="button" name="button" class="btn btn-primary"><i class="bi bi-plus-circle-fill"></i></button> </td>
+                <td class="align-middle"> <button type="button" name="button" onclick="orderName('Espresso')" class="btn btn-primary"><i class="bi bi-plus-circle-fill"></i></button> </td>
               </tr>
             </table>
           </div>
@@ -90,7 +90,7 @@
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Adding Dalgona to order</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Adding <span id="selectedProd"></span> to order</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -155,7 +155,7 @@
                   <th>Orders</th>
                 </thead>
                 <tr>
-                  <td class="align-middle">Dalgona</td>
+                  <td class="align-middle"> <input type="text" name="transaction[]" value="Dalgona" disabled> </td>
                   <td class="align-middle">2</td>
                   <td> <button type="button" name="button" class="btn btn-primary"><i class="bi bi-x-circle-fill"></i></button> </td>
                 </tr>
@@ -204,6 +204,9 @@
   </div>
 
   <script type="text/javascript">
+    function orderName(name) {
+      document.getElementById('selectedProd').innerHTML = name;
+    }
   </script>
 
   <!-- Option 1: Bootstrap Bundle with Popper -->
