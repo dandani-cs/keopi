@@ -138,6 +138,18 @@ body {
   margin-bottom: 20px;
 }
 
+.order-details-tab input[type="text"] {
+  outline: none !important;
+  border: 0;
+  background-color: transparent;
+}
+
+.order-details-tab input[type="number"] {
+  outline: none !important;
+  border: 0;
+  background-color: transparent;
+}
+
 .order-details-lbl {
   text-align: right
 }
