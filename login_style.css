@@ -32,7 +32,9 @@ body{
     margin-bottom: 30px;
 }
 .form-input{
-  width:100%;
+  width:50%;
+  margin-left: 25%;
+  align-self: center;
   margin-bottom: 10px;
     font-size: 0.85em;
     font-weight: 100;
@@ -67,6 +69,7 @@ input, textarea, button, button:focus {
 
 
 .form-submit {
+    margin-left: 25%;
     background-color: #935116;
     border: none;
     font-weight: 100;
