@@ -86,11 +86,6 @@
                      <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter"><i class="bi bi-plus-circle-fill"> </i>Edit Product
                      </button>
                     <a href="products.php" class="btn btn-primary"><i class="bi bi-x-circle-fill"></i> Cancel</a>
-
-
-
-
-
                      </form>';
                    }else
                    {
@@ -114,22 +109,22 @@
       <!-- Option 1: Bootstrap Bundle with Popper -->
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
+
+    </body>
+    </html>
 <?php
     if($_SERVER['REQUEST_METHOD'] == "POST")
    {
-$con = mysqli_connect("localhost", "root", "", "keopidb") or die(mysqli_error()); //Connect to server
-$id = $_SESSION['id'];
-$prod_name = ($_POST['product_name']);
-$prod_price = ($_POST['product_price']);
-$prod_desc = ($_POST['product_desc']);
+    $con = mysqli_connect("localhost", "root", "", "keopidb") or die(mysqli_error()); //Connect to server
+    $id = $_SESSION['id'];
+    $prod_name = ($_POST['product_name']);
+    $prod_price = ($_POST['product_price']);
+    $prod_desc = ($_POST['product_desc']);
 
 
-mysqli_query($con, "UPDATE products SET name='$prod_name', price='$prod_price',
-  description='$prod_desc' WHERE product_num='$id'") ;
-header("location: products.php");
-}
+    mysqli_query($con, "UPDATE products SET name='$prod_name', price='$prod_price',
+      description='$prod_desc' WHERE product_num='$id'") ;
+    header("location: products.php");
+  }
 ?>
-    </body>
-    
-    </html>
     

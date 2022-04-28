@@ -171,7 +171,7 @@
 
             <div class="row d-flex justify-content-end">
               <div class="col-sm-6">
-                <!-- <a href="edit_products.php?id='<?php $productnum_Holder ?>'"><button type="button" name="button" class="btn btn-primary"><i class="bi bi-pen-fill"></i> Edit Product</button></a> -->
+                <!-- <a href="edit_products.php?id='<?php $productnum_Holder ?>'"><button type="button" name="button" class="btn btn-primary"><i class="bi bi-pen-fill"></i> Edit Product</button></a>  -->
               </div>
             </div>
           </div>

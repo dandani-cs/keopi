@@ -70,56 +70,6 @@
           </button>
           <a href="products.php" class="btn btn-primary"><i class="bi bi-x-circle-fill"></i> Cancel</a>
           
-            
-
-      <!-- <?php 
-   //      if(isset($_POST['product_name'])) //Added an if to keep the page secured
-   //      { 
-   //      $product_num = ($_POST['product_number']);
-   //      $name = ($_POST['product_name']);
-   //      $price = ($_POST['product_price']);
-   //      $description = ($_POST['product_desc']);
-        
-      
-        
-
-   //        // <!-- Modal -->
-   //     Print '<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">';
-   //     Print  '<div class="modal-dialog modal-dialog-centered" role="document">';
-   //     Print  '<div class="modal-content">';
-   //     Print  '<div class="modal-header">';
-   //      Print       '<h5 class="modal-title" id="exampleModalLongTitle">Adding' .$name. 'to Products</h5>' ;
-   //      Print  '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'  ;    
-   //      Print   ' <span aria-hidden="true">&times;</span>'   ;   
-   //      Print   '</div>';
-   //      Print    '<div class="modal-body">' ; 
-   //      Print     '<h3>Product Name:</h3>'  ;
-   //      Print '<br>'   ;     
-   //      Print  $name;      
-   //      print    '<br>' ;
-   //      Print    '<h3>Product Price:</h3> '  ; 
-   //       print    '<br>' ;
-   //      Print $price;
-   //       print    '<br>' ;
-   //       print      ' <h3>Product Description</h3>';
-   //      print    '<br>' ;
-   //       print $description;      
-   //       print'     </div>
-   //            <div class="modal-footer">
-   //              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-   //              <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle-fill"> </i>Add</button>
-   //            </div>
-   //          </div>
-   //        </div>
-   //      </div>';
-
-   // $con = mysqli_connect("localhost", "root", "", "keopidb") or die(mysqli_error()); //Connect to server
-   //      mysqli_query($con, "INSERT INTO products (product_num, name, price, description) VALUES
-   //        ('$product_num','$name','$price','$description')"); //product insert query
-   //    }
-?>
- -->
-
               </form>
             </div>
           </div>
