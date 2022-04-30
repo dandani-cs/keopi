@@ -14,30 +14,37 @@
 </head>
 <body>
 <?php 
-        if(isset($_POST['product_name'])) //Added an if to keep the page secured
+if($_SERVER['REQUEST_METHOD'] = "POST") //Added an if to keep the page secured
+{
+        if(isset($_POST['email'])) //Added an if to keep the page secured
         { 
-        $product_num = ($_POST['product_number']);
-        $name = ($_POST['product_name']);
-        $price = ($_POST['product_price']);
-        $description = ($_POST['product_desc']);
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $is_admin = 0;
+
+        
+           if (isset($_POST['admin'])){
+            $is_admin = 1;
+         }
+       
 
 
         $con = mysqli_connect("localhost", "root", "", "keopidb") or die(mysqli_error()); //Connect to server
-        $get_productNum = mysqli_query($con,"SELECT * FROM products WHERE product_num='$product_num'");
-        $get_productName = mysqli_query($con,"SELECT * FROM products WHERE name='$name'");
+        $get_email = mysqli_query($con,"SELECT * FROM users WHERE email='$email'");
+        
+        if(mysqli_num_rows($get_email)>0 ){
 
-        if(mysqli_num_rows($get_productNum)>0 ||mysqli_num_rows($get_productName)>0){
-
-            $message = "Item Already Exist!";
+            $message = "User Already Exist!";
 
         }else {
 
-            $message = "Added Items Successfuly!";
-           mysqli_query($con, "INSERT INTO products (product_num, name, price, description) VALUES
-          ('$product_num','$name','$price','$description')"); //product insert query
+            $message = "Added User Successfuly!";
+           mysqli_query($con, "INSERT INTO users (email, password, is_admin) VALUES
+          ('$email','$password','$is_admin')"); //product insert query
 
         }
       }
+    }
       ?>
 
 
@@ -50,13 +57,16 @@
         </div>
         <ul class="nav flex-column nav-pills nav-justified">
           <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="user_management.php"><i class="bi bi-people-fill"></i>User Management</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" aria-current="page" href="#"><i class="bi bi-basket-fill"></i>Transact</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#"><i class="bi bi-bag-plus-fill"></i>Add transaction</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="#"><i class="bi bi-archive-fill"></i>Products</a>
+            <a class="nav-link" href="#"><i class="bi bi-archive-fill"></i>Products</a>
           </li>
           <li class="nav-item">
             <a class="nav-link"><i class="bi bi-clipboard-data-fill"></i>Reports</a>
@@ -71,7 +81,7 @@
 
       <div class="col-sm-6 main-content">
         <div class="heading">
-          <h1>PRODUCTS</h1>
+          <h1>USERS</h1>
         </div>
         <div class="row">
          
@@ -80,27 +90,24 @@
           <div class="col-sm-12">
             <table class="table table-hover" id="table">
               <thead class="thead-light ">
-                <th>Product Number</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Edit</th>
+                <th>User ID</th>
+                <th>Email</th>
+                <th>Role</th>
                 <th>Delete</th>
               </thead>
 
-              <?php 
+             <?php 
               $con = mysqli_connect("localhost", "root", "", "keopidb") or die(mysqli_error());
-              $query = mysqli_query($con, "Select * from products");
+              $query = mysqli_query($con, "Select * from users");
 
               while($row = mysqli_fetch_array($query))
               {
                 
                 Print "<tr>";
-                Print '<td class="align-middle">#' . $row['product_num']. "</td>";
-                Print '<td class="align-middle">' .$row['name']. "</td>";
-                Print '<td class="align-middle">₱' .$row['price']. "</td>";
-                Print '<td style="display:none;">'.$row['description']. "</td>";
-                Print '<td class="align-middle"> <a href="edit_products.php?id='.$row['product_num'].'" name="button" class="btn btn-primary"><i class="bi bi-pen-fill"></i></a> </td>';
-               Print '<td><a href="#" onclick="deleteFunction('.$row['product_num'].')" class="btn btn-primary"><i class="bi bi-trash-fill"></i></a></td>';
+                Print '<td class="align-middle">#' . $row['userid']. "</td>";
+                Print '<td class="align-middle">' .$row['email']. "</td>";
+                Print '<td class="align-middle">'; if($row['is_admin']){ print "Admin" ;}else{ print "Staff";}; print "</td>";
+               Print '<td><a href="#" onclick="deleteFunction('.$row['userid'].')" class="btn btn-primary"><i class="bi bi-trash-fill"></i></a></td>';
                Print '</tr>';
               }
 
@@ -109,7 +116,7 @@
             </table>
           </div>
         </div>
-        <a href="add_products.php" class="btn btn-primary"><i class="bi bi-plus-circle-fill"> </i>Add Product</a>
+        <a href="add_user.php" class="btn btn-primary"><i class="bi bi-plus-circle-fill"> </i>Add User</a>
        
         <div class="row mt-5">
           <div class="col-sm-6">
@@ -137,7 +144,7 @@
         <div class="order-details-tab">
           <div class="row">
             <div class="col-sm-12">
-              <h4> Product Details </h4>
+              <h4> User Details </h4>
             </div>
           </div>
           <div class="order-item">
@@ -149,29 +156,27 @@
                   <th></th>
                 </thead>
                 <tr>
-                  <td class="align-middle">Product Number</td>
+                  <td class="align-middle">User ID</td>
                   <td class="align-middle"><p name="prod_num" id="prod_num"></p></td>
                 </tr>
                 <tr>
-                  <td class="align-middle">Product Name</td>
+                  <td class="align-middle">Email</td>
                   <td class="align-middle"><p name="prod_name" id="prod_name"></p></td>
                 </tr>
                 <tr>
-                  <td class="align-middle">Product Price</td>
+                  <td class="align-middle">Role</td>
                   <td class="align-middle"><p name="prod_price" id="prod_price"></p></td>
                 </tr>
               </table>
               <div class="form-text">
-                Product Descripion:
+               
               </div>
-              <p  id="prod_desc"></p>
             </div>
 
             
 
             <div class="row d-flex justify-content-end">
               <div class="col-sm-6">
-                <!-- <a href="edit_products.php?id='<?php $productnum_Holder ?>'"><button type="button" name="button" class="btn btn-primary"><i class="bi bi-pen-fill"></i> Edit Product</button></a>  -->
               </div>
             </div>
           </div>
@@ -199,12 +204,12 @@
      }
   </script>
   <script>
-  function deleteFunction(id)
+  function deleteFunction(userid)
   {
-    var r=confirm("Are you sure you want to delete this product?");
+    var r=confirm("Are you sure you want to delete this user?");
     if (r==true)
     {
-      window.location.assign("delete_products.php?id=" + id);
+      window.location.assign("delete_user.php?userid=" + userid);
     }
   }
 </script>

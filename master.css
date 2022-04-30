@@ -2,13 +2,25 @@ body {
   background-color: #FDF2E9;
 }
 
+
 .edit_input:focus, {
   outline: none !important;
 }
 
+
 .active {
   background-color: #935116 !important;
 }
+
+.my-custom-scrollbar {
+position: relative;
+height: 200px;
+overflow: auto;
+}
+.table-wrapper-scroll-y {
+display: block;
+}
+
 
 .nav-item .bi {
   margin-right: 10px;
@@ -55,6 +67,7 @@ body {
 .btn-primary {
   background-color: #935116;
   border: 1px solid #935116;
+
   margin-top: 5px;
 }
 
@@ -142,6 +155,20 @@ body {
   margin-bottom: 20px;
 }
 
+
+.order-details-tab input[type="text"] {
+  outline: none !important;
+  border: 0;
+  background-color: transparent;
+}
+
+.order-details-tab input[type="number"] {
+  outline: none !important;
+  border: 0;
+  background-color: transparent;
+}
+
+
 .order-details-lbl {
   text-align: right
 }
@@ -194,4 +221,8 @@ body {
 
 #user-fullname {
   margin-bottom: 0px;
+
 }
+
+}
+
