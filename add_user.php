@@ -13,7 +13,15 @@
     <title>Keopi</title>
   </head>
   <body>
+<?php 
+session_start();
+if($_SESSION['email']){ // will check if the user is logged-in
 
+}else{ // will return to login page if user is not logged in
+  header("location:login.html");
+}
+$userRole = $_SESSION['is_admin']; //gets user role
+ ?>
     <!-- side nav -->
     <div class="container-fluid" style="height:100%;">
       <div class="row ">
@@ -65,12 +73,12 @@
               <form method="POST" action="user_management.php">
                 <div class="form-group">
                   <label for="product_name">Email</label>
-                  <input  class="form-control" type="email" name="email" placeholder="Enter Email Here" required>
+                  <input  class="form-control" type="email" name="email" placeholder="Enter Email Here" required><br>
                   <label for="product_price">Password</label>
-                  <input class="form-control" type="password" name="password" placeholder="Enter Password Here" required>
+                  <input class="form-control" type="password" name="password" placeholder="Enter Password Here" required><br>
                   <label for="product_desc">With Admin Privileges</label>
                   <input type="checkbox" name="admin" value="1">
-                </div> 
+                </div> <br>
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter"><i class="bi bi-plus-circle-fill"> </i>Add User
           </button>
           <a href="user_management.php" class="btn btn-primary"><i class="bi bi-x-circle-fill"></i> Cancel</a>

@@ -13,7 +13,15 @@
     <title>Keopi</title>
   </head>
   <body>
+    <?php 
+    session_start();
+    if($_SESSION['email']){ // will check if the user is logged-in
 
+    }else{ // will return to login page if user is not logged in
+      header("location:login.html");
+    }
+    $userRole = $_SESSION['is_admin']; //gets user role
+     ?>
     <!-- side nav -->
     <div class="container-fluid" style="height:100%;">
       <div class="row ">
@@ -25,7 +33,7 @@
           <?php 
             if($userRole == 1){
             print  '<li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="user_management.php"><i class="bi bi-people-fill"></i>User Management</a>
+                      <a class="nav-link" aria-current="page" href="user_management.php"><i class="bi bi-people-fill"></i>User Management</a>
                     </li>';
             }else{
               header("location:add-orders.php");
@@ -40,7 +48,7 @@
           <?php 
           if($userRole == 1){
           print  '<li class="nav-item">
-            <a class="nav-link" href="products.php"><i class="bi bi-archive-fill"></i>Products</a>
+            <a class="nav-link active" href="products.php"><i class="bi bi-archive-fill"></i>Products</a>
           </li>
           <li class="nav-item">
             <a class="nav-link"><i class="bi bi-clipboard-data-fill"></i>Reports</a>
@@ -63,7 +71,6 @@
           <div class="row">
             <div class="col-sm-12">
               <?php 
-              session_start(); //starts the session
               if(!empty($_GET['id']))
               {
                 $id = $_GET['id'];
