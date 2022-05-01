@@ -10,9 +10,62 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
   <link rel="stylesheet" href="master.css">
 
-  <title>Keopi</title>
+  <title>Keopi | User Management</title>
 </head>
 <body>
+<?php 
+session_start();
+if($_SESSION['email']){ // will check if the user is logged-in
+
+}else{ // will return to login page if user is not logged in
+  header("location:login.html");
+}
+$userRole = $_SESSION['is_admin']; //gets user role
+ ?>
+
+
+
+  <div class="container-fluid" style="height:100%;">
+    <div class="row gx-5">
+      <div class="col-sm-2 nav-col">
+        <div class="profile-mini text-center">
+          <img src="img/logo.png" class="rounded mx-auto d-block profile-pic title">
+        </div>
+        <ul class="nav flex-column nav-pills nav-justified">
+          <?php 
+            if($userRole == 1){ //page option will appear if user role is admin
+            print  '<li class="nav-item">
+                      <a class="nav-link active" aria-current="page" href="user_management.php"><i class="bi bi-people-fill"></i>User Management</a>
+                    </li>';
+            }else{ // will redirect to orders page if staff
+              header("location:add-orders.php");
+            }
+           ?>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#"><i class="bi bi-basket-fill"></i>Transact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="bi bi-bag-plus-fill"></i>Add transaction</a>
+          </li>
+          <?php 
+          if($userRole == 1){ //page option will appear if user role is admin
+          print  '<li class="nav-item">
+            <a class="nav-link" href="products.php"><i class="bi bi-archive-fill"></i>Products</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"><i class="bi bi-clipboard-data-fill"></i>Reports</a>
+          </li>';
+          }else{ //will redicect to orders page if staff
+            header("location:add-orders.php");
+          }
+           ?>
+          <li class="nav-item">
+            <a class="nav-link logout" href="logout.php"><i class="bi bi-box-arrow-left"></i>Log Out</a>
+          </li>
+        </ul>
+      </div>
+
+<!-- adding user php code starts here -->
 <?php 
 if($_SERVER['REQUEST_METHOD'] = "POST") //Added an if to keep the page secured
 {
@@ -48,37 +101,6 @@ if($_SERVER['REQUEST_METHOD'] = "POST") //Added an if to keep the page secured
       ?>
 
 
-
-  <div class="container-fluid" style="height:100%;">
-    <div class="row gx-5">
-      <div class="col-sm-2 nav-col">
-        <div class="profile-mini text-center">
-          <img src="img/logo.png" class="rounded mx-auto d-block profile-pic title">
-        </div>
-        <ul class="nav flex-column nav-pills nav-justified">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="user_management.php"><i class="bi bi-people-fill"></i>User Management</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#"><i class="bi bi-basket-fill"></i>Transact</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-bag-plus-fill"></i>Add transaction</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-archive-fill"></i>Products</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link"><i class="bi bi-clipboard-data-fill"></i>Reports</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link logout"><i class="bi bi-box-arrow-left"></i>Log Out</a>
-          </li>
-        </ul>
-      </div>
-
-
       <div class="col-sm-6 main-content">
         <div class="heading">
           <h1>USERS</h1>
@@ -95,7 +117,7 @@ if($_SERVER['REQUEST_METHOD'] = "POST") //Added an if to keep the page secured
                 <th>Role</th>
                 <th>Delete</th>
               </thead>
-
+              <!-- fetch table data from the DB -->
              <?php 
               $con = mysqli_connect("localhost", "root", "", "keopidb") or die(mysqli_error());
               $query = mysqli_query($con, "Select * from users");
@@ -110,7 +132,6 @@ if($_SERVER['REQUEST_METHOD'] = "POST") //Added an if to keep the page secured
                Print '<td><a href="#" onclick="deleteFunction('.$row['userid'].')" class="btn btn-primary"><i class="bi bi-trash-fill"></i></a></td>';
                Print '</tr>';
               }
-
               ?>
               
             </table>
@@ -202,8 +223,6 @@ if($_SERVER['REQUEST_METHOD'] = "POST") //Added an if to keep the page secured
        };
 
      }
-  </script>
-  <script>
   function deleteFunction(userid)
   {
     var r=confirm("Are you sure you want to delete this user?");

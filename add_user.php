@@ -18,28 +18,42 @@
     <div class="container-fluid" style="height:100%;">
       <div class="row ">
         <div class="col-sm-2 nav-col">
-          <div class="profile-mini text-center">
-            <img src="img/logo.png" class="rounded mx-auto d-block profile-pic title">
-          </div>
-          <ul class="nav flex-column nav-pills nav-justified">
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="#"><i class="bi bi-basket-fill"></i>Transact</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#"><i class="bi bi-bag-plus-fill"></i>Add transaction</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="#"><i class="bi bi-archive-fill"></i>Products</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link"><i class="bi bi-clipboard-data-fill"></i>Reports</a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link logout"><i class="bi bi-box-arrow-left"></i>Log Out</a>
-            </li>
-          </ul>
+        <div class="profile-mini text-center">
+          <img src="img/logo.png" class="rounded mx-auto d-block profile-pic title">
         </div>
+        <ul class="nav flex-column nav-pills nav-justified">
+          <?php 
+            if($userRole == 1){
+            print  '<li class="nav-item">
+                      <a class="nav-link active" aria-current="page" href="user_management.php"><i class="bi bi-people-fill"></i>User Management</a>
+                    </li>';
+            }else{
+              header("location:add-orders.php");
+            }
+           ?>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#"><i class="bi bi-basket-fill"></i>Transact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="bi bi-bag-plus-fill"></i>Add transaction</a>
+          </li>
+          <?php 
+          if($userRole == 1){
+          print  '<li class="nav-item">
+            <a class="nav-link" href="products.php"><i class="bi bi-archive-fill"></i>Products</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"><i class="bi bi-clipboard-data-fill"></i>Reports</a>
+          </li>';
+          }else{
+            header("location:add-orders.php");
+          }
+           ?>
+          <li class="nav-item">
+            <a class="nav-link logout" href="logout.php"><i class="bi bi-box-arrow-left"></i>Log Out</a>
+          </li>
+        </ul>
+      </div>
 
         <!-- main content container -->
         <div class="col-9 main-content" style="width: 83%;">
