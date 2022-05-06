@@ -73,6 +73,7 @@ html, body {
 }
 
 .filter {
+    color: #2e2e2e;
     border-bottom: 1px solid transparent;
     transition: border-color 150ms ease-in;
     text-decoration: none;
