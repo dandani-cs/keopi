@@ -7,7 +7,7 @@
         $db_username = "root";
         $db_pass     = "";
         $db_host     = "localhost";
-        $connection  = mysqli_connect("$db_host", "$db_username", "$db_pass", "$db_name") or die(mysqli_error());           
+        $connection  = mysqli_connect("$db_host", "$db_username", "$db_pass", "$db_name");         
         
         $results = mysqli_query($connection, $query);
         $exists  = mysqli_num_rows($results);
