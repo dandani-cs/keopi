@@ -43,10 +43,10 @@ $userRole = $_SESSION['is_admin']; //gets user role
             }
            ?>
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#"><i class="bi bi-basket-fill"></i>Transact</a>
+            <a class="nav-link" aria-current="page" href="orders.php"><i class="bi bi-basket-fill"></i>Transact</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-bag-plus-fill"></i>Add transaction</a>
+            <a class="nav-link" href="add-orders.php"><i class="bi bi-bag-plus-fill"></i>Add transaction</a>
           </li>
           <?php 
           if($userRole == 1){ //page option will only appear if user is admin
@@ -116,7 +116,7 @@ $userRole = $_SESSION['is_admin']; //gets user role
               <!-- table data from DB -->
               <?php 
               $con = mysqli_connect("localhost", "root", "", "keopidb") or die(mysqli_error());
-              $query = mysqli_query($con, "Select * from products");
+              $query = mysqli_query($con, "SELECT * FROM products");
 
               while($row = mysqli_fetch_array($query))
               {

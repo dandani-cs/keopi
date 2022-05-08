@@ -42,10 +42,10 @@ $userRole = $_SESSION['is_admin']; //gets user role
             }
            ?>
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#"><i class="bi bi-basket-fill"></i>Transact</a>
+            <a class="nav-link" aria-current="page" href="orders.php"><i class="bi bi-basket-fill"></i>Transact</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-bag-plus-fill"></i>Add transaction</a>
+            <a class="nav-link" href="add-orders.php"><i class="bi bi-bag-plus-fill"></i>Add transaction</a>
           </li>
           <?php 
           if($userRole == 1){ //page option will appear if user role is admin
@@ -120,7 +120,7 @@ if($_SERVER['REQUEST_METHOD'] = "POST") //Added an if to keep the page secured
               <!-- fetch table data from the DB -->
              <?php 
               $con = mysqli_connect("localhost", "root", "", "keopidb") or die(mysqli_error());
-              $query = mysqli_query($con, "Select * from users");
+              $query = mysqli_query($con, "SELECT * FROM users");
 
               while($row = mysqli_fetch_array($query))
               {
