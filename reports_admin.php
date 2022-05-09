@@ -6,48 +6,43 @@
       header("location:login.html");
     }
     $userRole = $_SESSION['is_admin']; //gets user role
+
     function get_filtered_data($query, $date)
     {
         $db_name     = "keopidb";
         $db_username = "root";
         $db_pass     = "";
         $db_host     = "localhost";
-        $connection  = mysqli_connect("$db_host", "$db_username", "$db_pass", "$db_name");         
-        
+        $connection  = mysqli_connect("$db_host", "$db_username", "$db_pass", "$db_name");
+
         $results = mysqli_query($connection, $query);
         $exists  = mysqli_num_rows($results);
-        
+
         $filtered_data = array();
-        
-        if($exists != 0)
-        {
-            while($row = mysqli_fetch_assoc($results))
-            {
+
+        if ($exists != 0) {
+            while ($row = mysqli_fetch_assoc($results)) {
                 $filtered_data[] = $row;
-                print '<script>console.log("'.$row['name'].'");</script>';
-            }   
+                print '<script>console.log("' . $row['name'] . '");</script>';
+            }
         }
         return $filtered_data;
     }
-    
+
     // Default values
     $date_filter  = new DateTime();
     $date_filter  = $date_filter->format('Y-m-d');
     $range_filter = "daily";
-    $query = 'SELECT * FROM transactions '.
-             'INNER JOIN products on transactions.product_num = products.product_num ';
+    $query = 'SELECT * FROM (SELECT transactions.*, orders.is_cancelled FROM transactions INNER JOIN orders on (transactions.order_num = orders.order_num)) AS transactions ' .
+        'INNER JOIN products prod on transactions.product_num = prod.product_num WHERE is_cancelled = 0 AND ';
 
-    $date_clause    = 'WHERE transaction_date = DATE("'.$date_filter.'") ';
+    $date_clause    = 'transaction_date = DATE("' . $date_filter . '")';
 
-    if(isset($_GET['date_filter']) && isset($_GET['range_filter']))
-    {
-        if($_GET['range_filter'] == 'daily')
-        {
+    if (isset($_GET['date_filter']) && isset($_GET['range_filter'])) {
+        if ($_GET['range_filter'] == 'daily') {
             $date_param  = new DateTime($_GET['date_filter']);
-            $date_clause = 'WHERE transaction_date = DATE("'.$date_param->format('Y-m-d').'")';
-        } 
-        else if ($_GET['range_filter'] == 'monthly')
-        {
+            $date_clause = 'transaction_date = DATE("' . $date_param->format('Y-m-d') . '")';
+        } else if ($_GET['range_filter'] == 'monthly') {
             $date_param  = new DateTime($_GET['date_filter']);
             $date_start  = clone $date_param;
             $date_end    = clone $date_param;
@@ -55,12 +50,12 @@
             $date_start->modify('first day of this month');
             $date_end->modify('last day of this month');
 
-            $date_clause = 'WHERE transaction_date >= DATE("'.$date_start->format("Y-m-d").'") '.
-                           'AND transaction_date <= DATE("'.$date_end->format("Y-m-d").'")';
+            $date_clause = 'transaction_date >= DATE("' . $date_start->format("Y-m-d") . '") ' .
+                'AND transaction_date <= DATE("' . $date_end->format("Y-m-d") . '")';
         }
     }
-    $query = $query." ".$date_clause;
-    
+    $query = $query . " " . $date_clause;
+
     $filtered_data = get_filtered_data($query, $date_filter);
     //print $query;
 ?>
@@ -332,11 +327,18 @@
         <?php 
             if(!empty($filtered_data))
             {
-                print "const data = {
-                    labels: Object.keys(product_stat),
+                print "
+                function sort_product_by_sales(x, y) {
+                    x_sales = parseInt(product_stat[x].qty) * parseInt(product_stat[x].price);
+                    y_sales = parseInt(product_stat[y].qty) * parseInt(product_stat[y].price);
+                    return x_sales < y_sales ? 1 : x_sales > y_sales ? -1 : 0;
+                }
+                chart_labels = Object.keys(product_stat).sort(sort_product_by_sales).slice(0, 5);
+                const data = {
+                    labels: chart_labels,
                     datasets: [{
-                        label: Object.keys(product_stat),
-                        data: Object.values(product_stat).map(product => product.qty),
+                        label: 'Total sales (PHP)',
+                        data: chart_labels.map(product => parseInt(product_stat[product].qty) * parseInt(product_stat[product].price)),
                         backgroundColor: [
                             'rgba(255, 99, 132, 1)',
                             'rgba(255, 159, 64, 1)',
@@ -356,10 +358,26 @@
                     options: {
                         scales: {
                             y: {
-                                ticks: {
-                                    precision: 0
+                                title : {
+                                    text: 'Total sales (PHP)',
+                                    display: true
                                 },
+                                display: true,
                                 beginAtZero: true
+                            },
+                            x: {
+                                title : {
+                                    text: 'Product',
+                                    display: true
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false,
+                                labels: {
+                                    color: 'rgb(255, 99, 132)'
+                                }
                             }
                         }
                     }

@@ -39,15 +39,15 @@
     $query = 'SELECT products.*, COUNT(transaction_num) AS num_sold FROM products LEFT JOIN '.
              '(%s) t_list on (products.product_num = t_list.product_num) GROUP BY products.product_num ORDER BY product_num;';
 
-    $transact_query = 'SELECT * FROM transactions ';
-    $date_clause    = 'WHERE transaction_date = DATE("'.$date_filter.'") ';
+    $transact_query = 'SELECT transactions.*, orders.is_cancelled FROM transactions INNER JOIN orders WHERE orders.is_cancelled = 0 AND';
+    $date_clause    = 'transaction_date = DATE("'.$date_filter.'")';
 
     if(isset($_GET['date_filter']) && isset($_GET['range_filter']))
     {
         if($_GET['range_filter'] == 'daily')
         {
             $date_param  = new DateTime($_GET['date_filter']);
-            $date_clause = 'WHERE transaction_date = DATE("'.$date_param->format('Y-m-d').'")';
+            $date_clause = 'transaction_date = DATE("'.$date_param->format('Y-m-d').'")';
         } 
         else if ($_GET['range_filter'] == 'monthly')
         {
@@ -58,19 +58,20 @@
             $date_start->modify('first day of this month');
             $date_end->modify('last day of this month');
 
-            $date_clause = 'WHERE transaction_date >= DATE("'.$date_start->format("Y-m-d").'") '.
+            $date_clause = 'transaction_date >= DATE("'.$date_start->format("Y-m-d").'") '.
                            'AND transaction_date <= DATE("'.$date_end->format("Y-m-d").'")';
         }
     }
     $transact_query   = $transact_query." ".$date_clause;
     $bestseller_query = 'SELECT products.*, COUNT(transaction_num) AS num_sold FROM products '.
-                        'INNER JOIN transactions on (products.product_num = transactions.product_num) '.
+                        'INNER JOIN (SELECT transactions.*, is_cancelled FROM transactions INNER JOIN orders on transactions.order_num = orders.order_num ) tr '. 
+                        'on (products.product_num = tr.product_num) WHERE tr.is_cancelled = 0 '.
                         'GROUP BY products.product_num ORDER BY num_sold LIMIT 3;';  // can be changed to top 5 or whatever
     
     $query = sprintf($query, $transact_query);
+    //print $query."<br/>".$bestseller_query;
     $filtered_data = get_filtered_data($query);
     $bestsellers   = get_filtered_data($bestseller_query);
-    //print $query."<br/>".$bestseller_query;
 ?>
 
 <!doctype html>
@@ -324,52 +325,68 @@
 
         product_stat = <?php print !empty($filtered_data) ? json_encode($product_stats) : "{}" ?>;
 
-        <?php 
-            if(!empty($filtered_data))
-            {
-                print "const data = {
-                    labels: Object.keys(product_stat).slice(0, 5),
-                    datasets: [{
-                        label: 'Total Product Sales',
-                        data: Object.values(product_stat).map(product => product.qty).slice(0, 5),
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(255, 159, 64, 1)',
-                            'rgba(255, 205, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(201, 203, 207, 1)'
-                        ],
-                        hoverOffset: 4,
-                    }]
-                };
-        
-                const config = {
-                    type: 'bar',
-                    data: data,
-                    options: {
-                        scales: {
-                            y: {
-                                ticks: {
-                                    precision: 0
+        <?php
+            if (!empty($filtered_data)) {
+                print "
+                    function sort_product_by_sales(x, y) {
+                        x_sales = parseInt(product_stat[x].qty) * parseInt(product_stat[x].price);
+                        y_sales = parseInt(product_stat[y].qty) * parseInt(product_stat[y].price);
+                        return x_sales < y_sales ? 1 : x_sales > y_sales ? -1 : 0;
+                    }
+                    chart_labels = Object.keys(product_stat).sort(sort_product_by_sales).slice(0, 5);
+                    const data = {
+                        labels: chart_labels,
+                        datasets: [{
+                            label: 'Total sales (PHP)',
+                            data: chart_labels.map(product => parseInt(product_stat[product].qty) * parseInt(product_stat[product].price)),
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(255, 205, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(201, 203, 207, 1)'
+                            ],
+                            hoverOffset: 4,
+                        }]
+                    };
+            
+                    const config = {
+                        type: 'bar',
+                        data: data,
+                        options: {
+                            scales: {
+                                y: {
+                                    title : {
+                                        text: 'Total sales (PHP)',
+                                        display: true
+                                    },
+                                    display: true,
+                                    beginAtZero: true
                                 },
-                                beginAtZero: true
+                                x: {
+                                    title : {
+                                        text: 'Product',
+                                        display: true
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false,
+                                    labels: {
+                                        color: 'rgb(255, 99, 132)'
+                                    }
+                                }
                             }
                         }
-                    }
-                };
-                
-                const myChart = new Chart(
-                    document.getElementById('myChart'),
-                    config, 
-
-                );
-
-                
-                ";
+                    };
+                    
+                    
+                    ";
             }
-        ?>
+            ?>
 
         function select_row(product_name) 
         {
