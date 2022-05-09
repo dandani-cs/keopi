@@ -1,10 +1,10 @@
 <?php include('header.php'); ?>
-<body style= "background-color: #FDF2E9">
+<body style= "background-color: #FDF2E9; height: 100% !important; ">
 	<style>
 		.nav-pills>li.active>a,
 		.nav-pills>li.active>a:focus,
 		.nav-pills>li.active>a:hover {
-			background-color: #C79645
+			background-color: #C79645 !important;
 		}
 		
 		hr{
@@ -12,7 +12,7 @@
 		}
 	</style>
 <?php include('navbar.php'); ?>
-<div class="container">
+<div class="container"><br>
 	<h1><center><b>KEOPI MENU</b></center></h1>
 	<hr/>
 	<ul class="nav nav-pills">

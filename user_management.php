@@ -53,7 +53,7 @@ $userRole = $_SESSION['is_admin']; //gets user role
             <a class="nav-link" href="products.php"><i class="bi bi-archive-fill"></i>Products</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link"><i class="bi bi-clipboard-data-fill"></i>Reports</a>
+            <a class="nav-link" href="reports_admin.php"><i class="bi bi-clipboard-data-fill"></i>Reports</a>
           </li>';
           }else{ //will redicect to orders page if staff
             header("location:add-orders.php");

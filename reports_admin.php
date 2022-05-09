@@ -86,27 +86,32 @@
                 <img src="img/keopi-logo-transparent-black.png" style="width: 100%;" />
             </div>
             <div class="d-flex flex-column">
-                <a class="side-nav-item" href="#">
+                <a class="side-nav-item" href="user_management.php">
+                    <div class="px-3 py-3">
+                        <p class="my-0">User Management</p>
+                    </div>
+                </a>
+                <a class="side-nav-item" href="orders.php">
                     <div class="px-3 py-3">
                         <p class="my-0">Transact</p>
                     </div>
                 </a>
-                <a class="side-nav-item" href="#">
+                <a class="side-nav-item" href="add-orders.php">
                     <div class="px-3 py-3">
                         <p class="my-0">Add Transaction</p>
                     </div>
                 </a>
-                <a class="side-nav-item" href="#">
+                <a class="side-nav-item" href="products.php">
                     <div class="px-3 py-3">
                         <p class="my-0">Products</p>
                     </div>
                 </a>
-                <a class="side-nav-item side-nav-selected" href="#">
+                <a class="side-nav-item side-nav-selected" href="reports_admin.php">
                     <div class="px-3 py-3">
                         <p class="my-0">Reports</p>
                     </div>
                 </a>
-                <a class="side-nav-item" href="#">
+                <a class="side-nav-item" href="logout.php">
                     <div class="px-3 py-3">
                         <p class="my-0">Logout</p>
                     </div>

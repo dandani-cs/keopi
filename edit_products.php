@@ -51,7 +51,7 @@
             <a class="nav-link active" href="products.php"><i class="bi bi-archive-fill"></i>Products</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link"><i class="bi bi-clipboard-data-fill"></i>Reports</a>
+            <a class="nav-link" href="reports_admin.php"><i class="bi bi-clipboard-data-fill"></i>Reports</a>
           </li>';
           }else{
             header("location:add-orders.php");
