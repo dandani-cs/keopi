@@ -1,5 +1,11 @@
 <?php
     session_start();
+    if($_SESSION['email']){ // will check if the user is logged-in
+
+    }else{ // will return to login page if user is not logged in
+      header("location:login.html");
+    }
+    $userRole = $_SESSION['is_admin']; //gets user role
 
     function get_filtered_data($query)
     {
@@ -87,39 +93,79 @@
 </head>
 
 <body>
-    <div class="d-flex flex-row min-vh-100" id="">
+    <div class="container-fluid" style="height:100%;">
+    <div class="row gx-5">
+      <div class="d-flex flex-row min-vh-100" id="" style="padding-left: 0px;">
         <div class="side-nav d-none d-md-block">
             <div class="text-center pt-3 mb-3">
                 <img src="img/keopi-logo-transparent-black.png" style="width: 100%;" />
-            </div>
-            <div class="d-flex flex-column">
-                <a class="side-nav-item" href="#">
+                <div class="d-flex flex-column">
+            <?php 
+            if($userRole == 1){
+            print
+            '
+                <a class="side-nav-item" href="user_management.php">
                     <div class="px-3 py-3">
-                        <p class="my-0">Transact</p>
+                        <p class="my-0">User Management</p>
                     </div>
                 </a>
-                <a class="side-nav-item" href="#">
+                 <a class="side-nav-item" href="orders.php">
                     <div class="px-3 py-3">
-                        <p class="my-0">Add Transaction</p>
+                        <p class="my-0">Orders</p>
                     </div>
                 </a>
-                <a class="side-nav-item" href="#">
+                <a class="side-nav-item side-nav-selected" href="add-orders.php">
+                    <div class="px-3 py-3">
+                        <p class="my-0">Add Order</p>
+                    </div>
+                </a>
+                <a class="side-nav-item" href="products.php">
                     <div class="px-3 py-3">
                         <p class="my-0">Products</p>
                     </div>
                 </a>
-                <a class="side-nav-item side-nav-selected" href="#">
+                <a class="side-nav-item " href="reports_admin.php">
                     <div class="px-3 py-3">
                         <p class="my-0">Reports</p>
                     </div>
                 </a>
-                <a class="side-nav-item" href="#">
+                <a class="side-nav-item" href="logout.php">
+                    <div class="px-3 py-3">
+                        <p class="my-0">Logout</p>
+                    </div>
+                </a>';
+                }
+                else{
+                  print '
+                   <a class="side-nav-item" href="orders.php">
+                    <div class="px-3 py-3">
+                        <p class="my-0">Orders</p>
+                    </div>
+                </a>
+                <a class="side-nav-item" href="add-orders.php">
+                    <div class="px-3 py-3">
+                        <p class="my-0">Add Order</p>
+                    </div>
+                </a>
+                <a class="side-nav-item side-nav-selected" href="reports_user.php">
+                    <div class="px-3 py-3">
+                        <p class="my-0">Reports</p>
+                    </div>
+                </a>
+                <a class="side-nav-item" href="logout.php">
                     <div class="px-3 py-3">
                         <p class="my-0">Logout</p>
                     </div>
                 </a>
+                ';
+                }
+           ?>
+
+               
+                
             </div>
         </div>
+      </div>
         <div class="main-content flex-grow-1">
             <div class="container-lg">
                 <div class="row row-cols-1 row-cols-lg-2 px-4 py-4">
