@@ -11,6 +11,16 @@
   <link rel="stylesheet" href="master.css">
 
   <title>Keopi</title>
+
+  <?php
+
+  $db_name = "keopidb";
+  $db_username = "root";
+  $db_pass = "";
+  $db_host = "localhost";
+  $con = mysqli_connect("$db_host", "$db_username", "$db_pass", "$db_name") or die(mysqli_error());
+
+   ?>
 </head>
 <body>
 
@@ -61,46 +71,45 @@
                 <th>Price</th>
                 <th>Actions</th>
               </thead>
-              <tr>
-                <td class="align-middle">#202204120001</td>
-                <td class="align-middle">Danielle</td>
-                <td class="align-middle">Php. 425</td>
-                <td class="align-middle"> <button type="button" name="button" class="btn btn-primary"><i class="bi bi-pencil-fill"></i></button> <button type="button" name="button" class="btn btn-primary"><i class="bi bi-trash3-fill"></i></button> </td>
-              </tr>
-              <tr>
-                <td class="align-middle">#202204120002</td>
-                <td class="align-middle">Paz</td>
-                <td class="align-middle">Php. 1250</td>
-                <td class="align-middle"> <button type="button" name="button" class="btn btn-primary"><i class="bi bi-pencil-fill"></i></button> <button type="button" name="button" class="btn btn-primary"><i class="bi bi-trash3-fill"></i></button> </td>
-              </tr>
-              <tr>
-                <td class="align-middle">#202204120003</td>
-                <td class="align-middle">Jecko</td>
-                <td class="align-middle">Php. 780</td>
-                <td class="align-middle"> <button type="button" name="button" class="btn btn-primary"><i class="bi bi-pencil-fill"></i></button> <button type="button" name="button" class="btn btn-primary"><i class="bi bi-trash3-fill"></i></button> </td>
-              </tr>
+              <?php
+              $query = "SELECT * FROM orders;";
+              $results = mysqli_query($con, $query);
+
+              while ($row = mysqli_fetch_array($results)) {
+                $order_num = $row["order_num"];
+
+                $transactionArray = "[";
+
+                $query2 = "SELECT * FROM transactions where order_num = " . $order_num;
+                $transactionResults = mysqli_query($con, $query2);
+
+                while ($row2 = mysqli_fetch_array($transactionResults)) {
+                  $transNum = $row2["transaction_num"];
+                  $transProd = $row2["product_num"];
+                  $transQty = $row2["qty"];
+
+                  $query3 = "SELECT * FROM products WHERE product_num = " . $row2["product_num"] . " LIMIT 1;";
+                  $prodResults = mysqli_query($con, $query3);
+
+                  while ($row3 = mysqli_fetch_array($prodResults)) {
+                    $transProd = $row3["name"];
+                  }
+
+                  $transactionArray .= "{name: \"$transProd\", qty: $transQty},";
+                }
+                $transactionArray = rtrim($transactionArray, ',');
+                $transactionArray .= "]";
+
+                Print '<tr onclick=\'showOrderDetails("' . $row["order_num"] . '", "' . $row["order_date"] . '", "' . $row["quantity"] . '", "' . $row["total_amount"] . '", '. $transactionArray .')\'>
+                  <td class="align-middle">#' . $row["order_num"] . '</td>
+                  <td class="align-middle">' . $row["customer_name"] . '</td>
+                  <td class="align-middle">Php. ' . $row["total_amount"] . '</td>
+                  <td class="align-middle"> <button type="button" name="button" class="btn btn-primary"><i class="bi bi-pencil-fill"></i></button> <button type="button" name="button" class="btn btn-primary" onclick="cancel"><i class="bi bi-trash3-fill"></i></button> </td>
+                </tr>
+                ';
+              }
+               ?>
             </table>
-          </div>
-        </div>
-
-        <div class="row mt-5">
-          <div class="col-sm-6">
-            <div class="img-links">
-              <img src="classes-img.png" alt="">
-            </div>
-          </div>
-
-          <div class="col-sm-6">
-            <div class="row">
-              <div class="col-sm-12">
-                <img src="grades-img.png" alt="">
-              </div>
-            </div>
-            <div class="row mt-5">
-              <div class="col-sm-12">
-                <img src="repo-img.png" alt="">
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -115,7 +124,7 @@
           <div class="order-item">
             <div class="row">
               <div class="col-sm-12 order-header">
-                <h5> Order # 202204120003 </h5>
+                <h5> Order # <span id="orderNum">#2022456789</span> </h5>
               </div>
             </div>
             <div class="row">
@@ -123,7 +132,7 @@
                 <p>Order Date</p>
               </div>
               <div class="col-sm-6">
-                April 12, 2022
+                <span id="orderDate"></span>
               </div>
             </div>
             <div class="row">
@@ -131,7 +140,7 @@
                 <p>Order time</p>
               </div>
               <div class="col-sm-6">
-                13:04:35
+                <span id="orderTime"></span>
               </div>
             </div>
 
@@ -140,16 +149,8 @@
                 <thead>
                   <th>Orders</th>
                 </thead>
-                <tr>
-                  <td class="align-middle">Dalgona</td>
-                  <td class="align-middle">2</td>
-                  <td> <button type="button" name="button" class="btn btn-primary"><i class="bi bi-x-circle-fill"></i></button> </td>
-                </tr>
-                <tr>
-                  <td class="align-middle">Lychee Aide</td>
-                  <td class="align-middle">1</td>
-                  <td> <button type="button" name="button" class="btn btn-primary"><i class="bi bi-x-circle-fill"></i></button> </td>
-                </tr>
+                <tbody id="orderItems">
+                </tbody>
               </table>
               <p> <em>Special Instructions: Less ice on all</em>  </p>
             </div>
@@ -159,7 +160,7 @@
                 <p> TOTAL QUANTITY </p>
               </div>
               <div class="col-sm-4">
-                <h5>2</h5>
+                <h5> <span id="totalQty"></span> </h5>
               </div>
             </div>
             <div class="row d-flex justify-content-end">
@@ -167,18 +168,16 @@
                 <p> TOTAL PRICE </p>
               </div>
               <div class="col-sm-4">
-                <h5>Php 1250</h5>
+                <h5>Php <span id="totalAmt"></span> </h5>
               </div>
             </div>
             <div class="row d-flex justify-content-end">
               <div class="col-sm-6">
-                <a href="#"><button type="button" name="button" class="btn btn-primary"><i class="bi bi-x-circle-fill"></i> CANCEL ORDER</button></a>
+                <a href="/keopi/cancel_orders.php?NUM=45" id="cancelBtn"><button type="button" name="button" class="btn btn-primary"><i class="bi bi-x-circle-fill"></i> CANCEL ORDER</button></a>
               </div>
             </div>
           </div>
         </div>
-
-
       </div>
     </div>
   </div>
@@ -187,6 +186,24 @@
 
   <!-- Option 1: Bootstrap Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    function showOrderDetails(orderNum, orderDate, totalQty, totalAmt, transactions) {
+      document.getElementById("orderNum").innerHTML = orderNum;
+      document.getElementById("orderDate").innerHTML = orderDate.split(" ")[0];
+      document.getElementById("orderTime").innerHTML = orderDate.split(" ")[1];
+      document.getElementById("totalQty").innerHTML = totalQty;
+      document.getElementById("totalAmt").innerHTML = totalAmt;
 
+      document.getElementById('orderItems').innerHTML = "";
+
+      document.getElementById('cancelBtn').setAttribute("href", "/keopi/cancel_orders.php?NUM=" + orderNum);
+
+      transactions.forEach((item, i) => {
+        var text = '<tr><td class="align-middle"> <input type="text" name="transaction[]" value="' + item.name + '" disabled> </td><td class="align-middle"> <input type="number" name="prodQuantity[]" value="' + item.qty + '" disabled> </td></tr>';
+        document.getElementById('orderItems').innerHTML += text;
+      });
+
+    }
+  </script>
 </body>
 </html>
