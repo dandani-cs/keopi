@@ -69,6 +69,7 @@
                 <th>Price</th>
                 <th>Actions</th>
               </thead>
+
               <?php
               $query = "SELECT * FROM products ORDER BY name DESC";
               $results = mysqli_query($con, $query);
@@ -139,8 +140,8 @@
               <h4> CONFIRM ORDER </h4>
             </div>
           </div>
-          <form action="add-orders.php" method="post">
-          <div class="order-item">
+          <form action="add-orders-post.php" method="post" id="post">
+            <div class="order-item">
             <div class="row">
               <div class="col-sm-auto order-details-lbl align-middle">
                 <label for="customerName" class="form-label align-middle">Customer Name</label>
@@ -157,6 +158,11 @@
                   <th>Orders</th>
                 </thead>
                 <tbody id="orderItems">
+                  <!-- <tr>
+                    <input type="hidden" name="productNum[]" value=""><td class="align-middle"> <input type="text" name="transaction[]" value="' + item.prodName + '" disabled> </td>
+                    <td class="align-middle"> <input type="number" name="prodQuantity[]" value="' + item.prodQty + '" disabled> </td>
+                    <td> <button type="button" name="button" class="btn btn-primary" onclick="removeTransaction(' + i + ')"><i class="bi bi-x-circle-fill"></i></button> </td>
+                  </tr> -->
                 </tbody>
 
               </table>
@@ -188,11 +194,12 @@
             <div class="row d-flex justify-content-end">
               <div class="col-sm-6">
                 <a href="#"><button type="submit" name="button" class="btn btn-primary"><i class="bi bi-plus-circle-fill"></i> CONFIRM ORDER</button></a>
+
               </div>
             </div>
 
           </div>
-        </form>
+          </form>
         </div>
       </div>
     </div>
@@ -202,6 +209,7 @@
     var prodNum_temp, prodName_temp, prodPrice_temp;
     var transactions = [];
     var total_price = 0;
+    var total_qty = 0;
 
 
     class Transaction {
@@ -223,10 +231,21 @@
 
     function addTransaction() {
       var qty = document.getElementById('itemQty').value;
+      total_qty += parseInt(qty);
       var transaction = new Transaction(prodNum_temp, prodName_temp, qty, prodPrice_temp);
       transactions.push(transaction);
       total_price += transaction.prodTotal;
-      var text = '<tr><input type="hidden" name="productNum[]" value="' + transaction.prodNum + '" /><td class="align-middle"> <input type="text" name="transaction[]" value="' + transaction.prodName + '" disabled /> </td><td class="align-middle"> <input type="number" name="prodQuantity[]" value="' + transaction.prodQty + '" disabled /> </td> <td> <button type="button" name="button" class="btn btn-primary" onclick="removeTransaction(' + (transactions.length - 1) + ')"><i class="bi bi-x-circle-fill"></i></button> </td> </tr>';
+
+
+      var text = `<tr>
+        <input type="hidden" form="post" name="productNum[]" value="` + transaction.prodNum + `" />
+        <td class="align-middle"> <input type="text" form="post" name="transaction[]" value="` + transaction.prodName + `" readonly /> </td>
+        <td class="align-middle"> <input type="number" form="post" name="prodQuantity[]" value="` + transaction.prodQty + `" readonly /> </td>
+        <td>
+          <button type="button" name="button" class="btn btn-primary" onclick="removeTransaction(` + (transactions.length - 1) + `)">
+          <i class="bi bi-x-circle-fill"></i></button>
+        </td>
+      </tr>`;
       document.getElementById('orderItems').innerHTML += text;
       updateSummary();
     }
@@ -234,17 +253,19 @@
     function removeTransaction(ind) {
       var deleted = transactions.splice(ind, 1);
       total_price = 0;
+      total_qty = 0;
       document.getElementById('orderItems').innerHTML = "";
       transactions.forEach((item, i) => {
         var text = '<tr><input type="hidden" name="productNum[]" value="' + item.prodNum + '"><td class="align-middle"> <input type="text" name="transaction[]" value="' + item.prodName + '" disabled> </td><td class="align-middle"> <input type="number" name="prodQuantity[]" value="' + item.prodQty + '" disabled> </td> <td> <button type="button" name="button" class="btn btn-primary" onclick="removeTransaction(' + i + ')"><i class="bi bi-x-circle-fill"></i></button> </td> </tr>';
         document.getElementById('orderItems').innerHTML += text;
         total_price += item.prodTotal;
+        total_qty += parseInt(item.prodQty);
       });
       updateSummary();
     }
 
     function updateSummary() {
-      document.getElementById("totalQty").value = transactions.length;
+      document.getElementById("totalQty").value = total_qty;
       document.getElementById("totalPrice").value = total_price;
     }
 
@@ -255,7 +276,7 @@
       $total_amount = $_POST["totalPrice"];
       $qty = $_POST["totalQty"];
       $customer_name = $_POST['customerName'];
-      $transaction = $_POST['transaction'][0];
+      $transaction = $_POST['transaction'];
       mysqli_query($con, "INSERT INTO orders (total_amount, quantity, customer_name) VALUES ('$total_amount', '$qty', '$customer_name')");
 
       $query = "SELECT * FROM orders ORDER BY order_num DESC LIMIT 1";
@@ -265,12 +286,12 @@
         for ($i = 0; $i < count($_POST["productNum"]); $i++) {
           $product_num = $_POST["productNum"][$i];
           $order_num = $row["order_num"];
-          $prodqty = $_REQUEST["prodQuantity"][$i];
-          mysqli_query($con, "INSERT INTO transactions (product_num, order_num, qty) VALUES ('$product_num', '$order_num', '$prodQty')");
+          $prodqty = $_POST["prodQuantity"][$i];
+          mysqli_query($con, "INSERT INTO transactions (product_num, order_num, qty) VALUES ('$product_num', '$order_num', '$prodqty')");
 
         } // for loop end
       } // while results end
-      header("location: orders.html");
+
     } // if POST end
 
 
