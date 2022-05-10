@@ -362,13 +362,13 @@
                                     {
                                         $product_name  = $sales_hist['name'];
                                         $qty_sold      = $sales_hist['qty_sold'];
-                                        $total_sales   = $sales_hist['total_sales'];
+                                        $product_sales = $sales_hist['total_sales'];
                                         $transact_date = $sales_hist['transaction_date'];
 
                                         if(!isset($product_stats[$product_name]['sales_hist']))
                                             $product_stats[$product_name]['sales_hist'] = array();
                                         
-                                        $product_stats[$product_name]['sales_hist'][] = array('date' => $transact_date, 'sales' => $total_sales);
+                                        $product_stats[$product_name]['sales_hist'][] = array('date' => $transact_date, 'sales' => $product_sales);
                                     }
                                 } else
                                 {
@@ -424,7 +424,7 @@
                                 </div>
                                 <div class="d-flex flex-row justify-content-between">
                                     <div>
-                                        <p>Total Price: </p>
+                                        <p>Price: </p>
                                     </div>
                                     <div>
                                         <p>PHP <span id="selected-price">PHP 500.00</span> </p>
