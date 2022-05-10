@@ -9,7 +9,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
   <link rel="stylesheet" href="master.css">
-
+<link rel="stylesheet" href="css/reports_styles.css" />
   <title>Keopi | User Management</title>
 </head>
 <body>
@@ -25,44 +25,57 @@ $userRole = $_SESSION['is_admin']; //gets user role
 
 
 
-  <div class="container-fluid" style="height:100%;">
+   <div class="container-fluid" style="height:100%;">
     <div class="row gx-5">
-      <div class="col-sm-2 nav-col">
-        <div class="profile-mini text-center">
-          <img src="img/logo.png" class="rounded mx-auto d-block profile-pic title">
+      <div class="d-flex flex-row min-vh-100" id="" style="padding-left: 0px;">
+        <div class="side-nav d-none d-md-block">
+            <div class="text-center pt-3 mb-3">
+                <img src="img/keopi-logo-transparent-black.png" style="width: 100%;" />
+                <div class="d-flex flex-column">
+            <?php 
+            if($userRole == 1){
+            print
+            '
+                <a class="side-nav-item side-nav-selected" href="user_management.php">
+                    <div class="px-3 py-3">
+                        <p class="my-0">User Management</p>
+                    </div>
+                </a>
+                 <a class="side-nav-item" href="orders.php">
+                    <div class="px-3 py-3">
+                        <p class="my-0">Orders</p>
+                    </div>
+                </a>
+                <a class="side-nav-item" href="add-orders.php">
+                    <div class="px-3 py-3">
+                        <p class="my-0">Add Order</p>
+                    </div>
+                </a>
+                <a class="side-nav-item" href="products.php">
+                    <div class="px-3 py-3">
+                        <p class="my-0">Products</p>
+                    </div>
+                </a>
+                <a class="side-nav-item " href="reports_admin.php">
+                    <div class="px-3 py-3">
+                        <p class="my-0">Reports</p>
+                    </div>
+                </a>
+                <a class="side-nav-item" href="logout.php">
+                    <div class="px-3 py-3">
+                        <p class="my-0">Logout</p>
+                    </div>
+                </a>';
+                }
+                else{
+                  header('location:add-orders.php');
+                }
+           ?>
+
+               
+                
+            </div>
         </div>
-        <ul class="nav flex-column nav-pills nav-justified">
-          <?php 
-            if($userRole == 1){ //page option will appear if user role is admin
-            print  '<li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="user_management.php"><i class="bi bi-people-fill"></i>User Management</a>
-                    </li>';
-            }else{ // will redirect to orders page if staff
-              header("location:add-orders.php");
-            }
-           ?>
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="orders.php"><i class="bi bi-basket-fill"></i>Transact</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="add-orders.php"><i class="bi bi-bag-plus-fill"></i>Add transaction</a>
-          </li>
-          <?php 
-          if($userRole == 1){ //page option will appear if user role is admin
-          print  '<li class="nav-item">
-            <a class="nav-link" href="products.php"><i class="bi bi-archive-fill"></i>Products</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="reports_admin.php"><i class="bi bi-clipboard-data-fill"></i>Reports</a>
-          </li>';
-          }else{ //will redicect to orders page if staff
-            header("location:add-orders.php");
-          }
-           ?>
-          <li class="nav-item">
-            <a class="nav-link logout" href="logout.php"><i class="bi bi-box-arrow-left"></i>Log Out</a>
-          </li>
-        </ul>
       </div>
 
 <!-- adding user php code starts here -->
