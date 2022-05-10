@@ -32,7 +32,7 @@
     $date_filter  = new DateTime();
     $date_filter  = $date_filter->format('Y-m-d');
     $range_filter = "daily";
-    $query = 'SELECT *, (qty * price) as total_sales FROM (SELECT transactions.* FROM transactions INNER JOIN orders on (transactions.order_num = orders.order_num)) AS tr ' .
+    $query = 'SELECT *, (qty * price) as total_sales FROM (SELECT transactions.transaction_num, transactions.qty, transactions.product_num, transactions.order_num, transactions.transaction_date, orders.cancelled FROM transactions INNER JOIN orders on (transactions.order_num = orders.order_num)) AS tr ' .
         'INNER JOIN products prod on tr.product_num = prod.product_num WHERE tr.cancelled = 0 AND ';
 
     $date_clause = 'transaction_date = DATE("' . $date_filter . '")';

@@ -36,7 +36,7 @@ $range_filter = "daily";
 $query = 'SELECT products.*, IFNULL(qty, 0) AS qty FROM products '.
 'LEFT JOIN (%s) t_list on products.product_num = t_list.product_num GROUP BY products.product_num;';
 
-$transact_query = 'SELECT transactions.* FROM transactions INNER JOIN orders WHERE orders.cancelled = 0 AND';
+$transact_query = 'SELECT transactions.* FROM transactions INNER JOIN orders on transactions.order_num = orders.order_num WHERE orders.cancelled = 0 AND';
 $date_clause    = 'transaction_date = DATE("' . $date_filter . '")';
 
 if (isset($_GET['date_filter']) && isset($_GET['range_filter'])) {
