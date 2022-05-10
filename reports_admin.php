@@ -424,7 +424,7 @@
                                 </div>
                                 <div class="d-flex flex-row justify-content-between">
                                     <div>
-                                        <p>Total Price: </p>
+                                        <p>Price: </p>
                                     </div>
                                     <div>
                                         <p>PHP <span id="selected-price">PHP 500.00</span> </p>
