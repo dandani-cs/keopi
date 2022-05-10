@@ -2,10 +2,10 @@
 session_start();
 $email = ($_POST['email']);
 $password = ($_POST['password']);
-$db_name = "keopidb";
-$db_username = "root";
-$db_pass = "";
-$db_host = "localhost";
+$db_name = "epiz_31692043_keopidb";
+$db_username = "epiz_31692043";
+$db_pass = "AVcoLaXFsz";
+$db_host = "sql111.epizy.com";
 $con = mysqli_connect("$db_host","$db_username","$db_pass", "$db_name") or die(mysqli_error()); //Connect to server
 $query = "SELECT * FROM users WHERE email='$email'";
 $results = mysqli_query($con, $query); //Query the users table if there are matching rows equal to $username

@@ -227,7 +227,7 @@
             </div>
             <div class="row d-flex justify-content-end">
               <div class="col-sm-6">
-                <a href="/keopi/cancel_orders.php?NUM=45" id="cancelBtn"><button type="button" name="button" class="btn btn-primary"><i class="bi bi-x-circle-fill"></i> CANCEL ORDER</button></a>
+                <a href="/keopi/cancel_orders.php?NUM=" id="cancelBtn"><button type="button" name="button" class="btn btn-primary"><i class="bi bi-x-circle-fill"></i> CANCEL ORDER</button></a>
               </div>
             </div>
           </div>
@@ -250,7 +250,7 @@
 
       document.getElementById('orderItems').innerHTML = "";
 
-      document.getElementById('cancelBtn').setAttribute("href", "/keopi/cancel_orders.php?NUM=" + orderNum);
+      document.getElementById('cancelBtn').setAttribute("href", "cancel_orders.php?NUM=" + orderNum);
 
       transactions.forEach((item, i) => {
         var text = '<tr><td class="align-middle"> <input type="text" name="transaction[]" value="' + item.name + '" disabled> </td><td class="align-middle"> <input type="number" name="prodQuantity[]" value="' + item.qty + '" disabled> </td></tr>';

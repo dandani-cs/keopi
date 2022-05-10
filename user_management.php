@@ -93,9 +93,11 @@ if($_SERVER['REQUEST_METHOD'] = "POST") //Added an if to keep the page secured
             $is_admin = 1;
          }
        
-
-
-        $con = mysqli_connect("localhost", "root", "", "keopidb") or die(mysqli_error()); //Connect to server
+        $db_name = "epiz_31692043_keopidb";
+        $db_username = "epiz_31692043";
+        $db_pass = "AVcoLaXFsz";
+        $db_host = "sql111.epizy.com";
+        $con = mysqli_connect("$db_host","$db_username","$db_pass", "$db_name") or die(mysqli_error()); //Connect to server
         $get_email = mysqli_query($con,"SELECT * FROM users WHERE email='$email'");
         
         if(mysqli_num_rows($get_email)>0 ){
