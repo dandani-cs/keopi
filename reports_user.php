@@ -9,10 +9,10 @@ $userRole = $_SESSION['is_admin']; //gets user role
 
 function get_filtered_data($query)
 {
-    $db_name     = "keopidb";
-    $db_username = "root";
-    $db_pass     = "";
-    $db_host     = "localhost";
+    $db_name = "epiz_31692043_keopidb";
+    $db_username = "epiz_31692043";
+    $db_pass = "AVcoLaXFsz";
+    $db_host = "sql111.epizy.com";
     $connection  = mysqli_connect("$db_host", "$db_username", "$db_pass", "$db_name");
 
     $results = mysqli_query($connection, $query);
@@ -339,7 +339,7 @@ $bestsellers   = get_filtered_data($bestseller_query);
                             hoverOffset: 4,
                         }]
                     };
-            
+
                     const config = {
                         type: 'bar',
                         data: data,
@@ -370,8 +370,8 @@ $bestsellers   = get_filtered_data($bestseller_query);
                             }
                         }
                     };
-                    
-                    
+
+
                     ";
                 }
                 ?>

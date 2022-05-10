@@ -15,10 +15,10 @@
 
   <?php
 
-  $db_name = "keopidb";
-  $db_username = "root";
-  $db_pass = "";
-  $db_host = "localhost";
+  $db_name = "epiz_31692043_keopidb";
+  $db_username = "epiz_31692043";
+  $db_pass = "AVcoLaXFsz";
+  $db_host = "sql111.epizy.com";
   $con = mysqli_connect("$db_host", "$db_username", "$db_pass", "$db_name") or die(mysqli_error());
 
    ?>
@@ -39,7 +39,7 @@
             <div class="text-center pt-3 mb-3">
                 <img src="img/keopi-logo-transparent-black.png" style="width: 100%;" />
                 <div class="d-flex flex-column">
-            <?php 
+            <?php
             if($userRole == 1){
             print
             '
@@ -100,8 +100,8 @@
                 }
            ?>
 
-               
-                
+
+
             </div>
         </div>
       </div>
