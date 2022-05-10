@@ -30,10 +30,10 @@ include('db.php');
 
 </head>
 <!-- styles -->
-<style type = "text/css">  
+<style type = "text/css">
 	body
 	{
-		background-color: #FDF2E9; 
+		background-color: #FDF2E9;
 	}
 	.w3_navigation
 	{
@@ -47,7 +47,7 @@ include('db.php');
 	{
 		background-color: #935116;
 	}
-	#myImg 
+	#myImg
 	{
 	  border-radius: 0px;
 	  cursor: pointer;
@@ -57,7 +57,7 @@ include('db.php');
 	#myImg:hover {opacity: 0.7;}
 
 	/* The Modal (background) */
-	.modal 
+	.modal
 	{
 	  display: none; /* Hidden by default */
 	  position: fixed; /* Stay in place */
@@ -73,7 +73,7 @@ include('db.php');
 	}
 
 	/* Modal Content (Image) */
-	.modal-content 
+	.modal-content
 	{
 	  margin: auto;
 	  display: block;
@@ -82,7 +82,7 @@ include('db.php');
 	}
 
 	/* Caption of Modal Image (Image Text) - Same Width as the Image */
-	#caption 
+	#caption
 	{
 	  margin: auto;
 	  display: block;
@@ -95,20 +95,20 @@ include('db.php');
 	}
 
 	/* Add Animation - Zoom in the Modal */
-	.modal-content, #caption 
+	.modal-content, #caption
 	{
 	  animation-name: zoom;
 	  animation-duration: 0.6s;
 	}
 
-	@keyframes zoom 
+	@keyframes zoom
 	{
 	  from {transform:scale(0)}
 	  to {transform:scale(1)}
 	}
 
 	/* The Close Button */
-	.close 
+	.close
 	{
 	  position: absolute;
 	  top: 15px;
@@ -120,7 +120,7 @@ include('db.php');
 	}
 
 	.close:hover,
-	.close:focus 
+	.close:focus
 	{
 	  color: #bbb;
 	  text-decoration: none;
@@ -130,13 +130,13 @@ include('db.php');
 	/* 100% Image Width on Smaller Screens */
 	@media only screen and (max-width: 700px)
 	{
-	  .modal-content 
+	  .modal-content
 	  {
 		width: 100%;
 	  }
 	}
-	
-	* 
+
+	*
 	{
 	  box-sizing: border-box;
 	}
@@ -147,14 +147,14 @@ include('db.php');
 	}
 
 	/* Add a pointer when hovering over the thumbnail images */
-	.cursor 
+	.cursor
 	{
 	  cursor: pointer;
 	}
 
 	/* Next & previous buttons */
 	.prev,
-	.next 
+	.next
 	{
 	  cursor: pointer;
 	  position: absolute;
@@ -171,7 +171,7 @@ include('db.php');
 	}
 
 	/* Position the "next button" to the right */
-	.next 
+	.next
 	{
 	  right: 0;
 	  border-radius: 3px 0 0 3px;
@@ -179,13 +179,13 @@ include('db.php');
 
 	/* On hover, add a black background color with a little bit see-through */
 	.prev:hover,
-	.next:hover 
+	.next:hover
 	{
 	  background-color: rgba(0, 0, 0, 0.8);
 	}
 
 	/* Number text (1/3 etc) */
-	.numbertext 
+	.numbertext
 	{
 	  color: #f2f2f2;
 	  font-size: 30px;
@@ -195,7 +195,7 @@ include('db.php');
 	}
 
 	/* Container for image text */
-	.caption-container 
+	.caption-container
 	{
 	  text-align: center;
 	  background-color: #222;
@@ -241,7 +241,7 @@ include('db.php');
 				</button>
 				<h1><a class="navbar-brand" href="home.php"><span>Keopi</span><p class="logo_w3l_agile_caption">Your Local Cafe</p></a></h1>
 			</div>
-			
+
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
 				<nav class="menu menu--iris">
@@ -276,9 +276,9 @@ include('db.php');
 				</li>
 			</ul>
 		</div>
-		
+
 		<div class="clearfix"> </div>
-		
+
 	</div>
 </div>
 <!-- //end banner -->
@@ -286,204 +286,43 @@ include('db.php');
 <!-- //start about -->
  <div class="about-wthree" id="about" style="background: #FDF2E9; padding-bottom: 20px;">
 	  <div class="container">
-		 
-		 	<div class="ab-w3l-spa" >
-                           <h3 class="title-w3-agileits title-black-wthree">ABOUT OUR CAFE</h3>
-					   <p class="about-para-w3ls">Our cafe offers a wide variety of coffee-based products, as well as non-coffee based products. We also offer other food & drink related items such as iced tea and lemonade, with the additions of sandwiches as well as dessert related items with pastries.</p>
-		        </div>
-				<br>
-				<!-- Trigger the Modal -->
-				<center>
-					<img id="myImg" src="img/menu.png" alt="Keopi Menu" style="width:700%;max-width:500px">
-				</center>
+			<div class="row">
+				<div class="col-sm-6 text-right">
+					<h3 class="title-w3-agileits title-black-wthree">ABOUT OUR CAFE</h3>
+					<p class="about-para-w3ls"> Keopi is a family-owned business in a stop-and-go cafe to delight you with refreshments as you pass by. Take a break from the woes of travel and grab a drink from Keopi! We offer a variety of beverages, from caffenated drinks to sweet ades. </p>
+					<br>
+				</div>
+				<div class="col-sm-6 text-center">
+
+					<img src="img/caramel.jpg" width="500" onclick="currentSlide(1)" alt="Caramel">
+				</div>
+			</div>
+
+
 		 </div>
 		</div>
-			    
 
-					<!-- The Modal -->
-					<div id="myModal" class="modal">
+		<div class="about-wthree" id="about" style="background: #935116; padding-bottom: 20px; color: white !important; ">
+	 	  <div class="container">
+	 			<div class="row">
+					<div class="col-sm-6 text-center">
+	 					<img src="img/chocolatechip.jpg" width="500" onclick="currentSlide(1)" alt="Caramel">
+	 				</div>
+	 				<div class="col-sm-6 text-right">
+	 					<h3 class="title-w3-agileits title-black-wthree">GRAB A BITE!</h3>
+	 					<p class="about-para-w3ls" style="color: white;"> We don't restrict our menu to drinks only. When you go hungry on your rides, we also sell sandwiches to fill your empty stomach. If you've got a sweet tooth, we have pastries for you too! </p>
+	 					<br>
+	 				</div>
 
-					  <!-- The Close Button -->
-					  <span class="close">&times;</span>
+	 			</div>
 
-					  <!-- Modal Content (The Image) -->
-					  <img class="modal-content" id="img01">
 
-					  <!-- Modal Caption (Image Text) -->
-					  <div id="caption"></div>
-				</center>
-					</div>
-				
+	 		 </div>
+	 		</div>
 
-<script>			
-// Get the modal
-var modal = document.getElementById("myModal");
-
-// Get the image and insert it inside the modal - use its "alt" text as a caption
-var img = document.getElementById("myImg");
-var modalImg = document.getElementById("img01");
-var captionText = document.getElementById("caption");
-img.onclick = function(){
-  modal.style.display = "block";
-  modalImg.src = this.src;
-  captionText.innerHTML = this.alt;
-}
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
-</script>
-		   	<!-- Container for the image gallery -->
-		   	<div style="background: #935116; padding-top: 20px; padding-bottom: 20px;"  >
-		   		<center><h2 style="color:white;">WHAT WE SELL</h2></center>
-			<br>
-				<div class="container">
-				<center>
-				  <!-- Full-width images with number text -->
-				  <div class="mySlides">
-					<div class="numbertext">1 / 4</div>
-					  <img src="img/caramel.jpg" style="width:100%">
-				  </div>
-
-				  <div class="mySlides">
-					<div class="numbertext">2 / 4</div>
-					  <img src="img/chocolatechip.jpg" style="width:100%">
-				  </div>
-
-				  <div class="mySlides">
-					<div class="numbertext">3 / 4</div>
-					  <img src="img/eggbaconcheese.jpg" style="width:100%">
-				  </div>
-
-				  <div class="mySlides">
-					<div class="numbertext">4 / 4</div>
-					  <img src="img/strawberrymilk.jpg" style="width:100%">
-				  </div>
-				</center>
-
-				  <!-- Next and previous buttons -->
-				  <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-				  <a class="next" onclick="plusSlides(1)">&#10095;</a>
-
-				  <!-- Image text -->
-				  <div class="caption-container" style="background: #FDF2E9;">
-				  	<br>
-					<p id="caption" style="color: black; padding-bottom: 0px;">Our Products</p>
-				  </div>
-
-				  <!-- Thumbnail images -->
-				  <center>
-				  <div class="row">
-					<div class="column">
-					  <img class="demo cursor" src="img/caramel.jpg" height="300" width="250" onclick="currentSlide(1)" alt="Caramel">
-					</div>
-					<div class="column">
-					  <img class="demo cursor" src="img/chocolatechip.jpg" height="300" width="250" onclick="currentSlide(2)" alt="Chocolate Chip">
-					</div>
-					<div class="column">
-					  <img class="demo cursor" src="img/eggbaconcheese.jpg" height="300" width="250" onclick="currentSlide(3)" alt="Egg Bacon Cheese">
-					</div>
-					<div class="column">
-					  <img class="demo cursor" src="img/strawberrymilk.jpg" height="300" width="250" onclick="currentSlide(4)" alt="Strawberry Milk">
-					</div>
-				  </div>
-				  </center>
-				</div>
-		   	</div>
-			
-<script>
-let slideIndex = 1;
-showSlides(slideIndex);
-
-// Next/previous controls
-function plusSlides(n) {
-  showSlides(slideIndex += n);
-}
-
-// Thumbnail image controls
-function currentSlide(n) {
-  showSlides(slideIndex = n);
-}
-
-function showSlides(n) {
-  let i;
-  let slides = document.getElementsByClassName("mySlides");
-  let dots = document.getElementsByClassName("demo");
-  let captionText = document.getElementById("caption");
-  if (n > slides.length) {slideIndex = 1}
-  if (n < 1) {slideIndex = slides.length}
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";
-  }
-  for (i = 0; i < dots.length; i++) {
-    dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex-1].style.display = "block";
-  dots[slideIndex-1].className += " active";
-  captionText.innerHTML = dots[slideIndex-1].alt;
-}
-</script>
-    </div>
-</div>
-<!-- //end about -->
-
-<!-- //start contact -->
 <section class="contact-w3ls" id="contact">
 	<div class="container">
-		<div class="col-lg-6 col-md-6 col-sm-6 contact-w3-agile2" data-aos="flip-left">
-			<div class="contact-agileits">
-				<h4>Contact Us</h4>
-				<p class="contact-agile2">Sign Up For Our Services</p>
-				<form  method="post" name="sentMessage" id="contactForm" >
-					<br><br>
-					<div class="control-group form-group">
-
-                            <label class="contact-p1">Full Name:</label>
-                            <input type="text" class="form-control" name="name" id="name" required >
-                            <p class="help-block"></p>
-
-                    </div>
-                    <div class="control-group form-group">
-
-                            <label class="contact-p1">Phone Number:</label>
-                            <input type="tel" class="form-control" name="phone" id="phone" required >
-							<p class="help-block"></p>
-
-                    </div>
-                    <div class="control-group form-group">
-
-                            <label class="contact-p1">Email Address:</label>
-                            <input type="email" class="form-control" name="email" id="email" required >
-							<p class="help-block"></p>
-
-                    </div>
-
-
-                    <input type="submit" name="sub" value="Send Now" class="btn btn-primary">
-
-				</form>
-				<?php
-				if(isset($_POST['sub']))
-				{
-					$name =$_POST['name'];
-					$phone = $_POST['phone'];
-					$email = $_POST['email'];
-					$approval = "Not Allowed";
-					$sql = "INSERT INTO `contact`(`fullname`, `phoneno`, `email`,`cdate`,`approval`) VALUES ('$name','$phone','$email',now(),'$approval')" ;
-
-
-					if(mysqli_query($con,$sql))
-					echo"OK";
-
-				}
-				?>
-			</div>
-		</div>
-		<div class="col-lg-6 col-md-6 col-sm-6 contact-w3-agile1" data-aos="flip-right">
+		<div class="col-lg-12 col-md-12 col-sm-12 contact-w3-agile1">
 			<h4>Connect With Us</h4>
 			<p class="contact-agile1"><strong>Phone :</strong>+63 912 345 6789</p>
 			<p class="contact-agile1"><strong>Email :</strong> <a href="mailto:keopi@gmail.com">keopi@gmail.com</a></p>

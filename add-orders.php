@@ -21,7 +21,7 @@
       header("location:login.html");
     }
     $userRole = $_SESSION['is_admin']; //gets user role
-     
+
 
   $db_name = "keopidb";
   $db_username = "root";
@@ -31,14 +31,14 @@
 
    ?>
 
-  <div class="container-fluid" style="height:100%;">
+  <div class="container-fluid" style="height:100vh;">
     <div class="row gx-5">
       <div class="d-flex flex-row min-vh-100" id="" style="padding-left: 0px;">
         <div class="side-nav d-none d-md-block">
             <div class="text-center pt-3 mb-3">
                 <img src="img/keopi-logo-transparent-black.png" style="width: 100%;" />
                 <div class="d-flex flex-column">
-            <?php 
+            <?php
             if($userRole == 1){
             print
             '
@@ -99,8 +99,8 @@
                 }
            ?>
 
-               
-                
+
+
             </div>
         </div>
       </div>
@@ -108,11 +108,6 @@
       <div class="col-sm-6 main-content">
         <div class="heading">
           <h1>ADD ORDER</h1>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 d-flex flex-row-reverse">
-            <a href="#"> <button type="button" name="button" class="btn btn-primary"> <i class="bi bi-plus-circle-fill"></i> Add transaction</button></a>
-          </div>
         </div>
         <div class="row">
           <div class="col-sm-12">
@@ -302,6 +297,7 @@
       </tr>`;
       document.getElementById('orderItems').innerHTML += text;
       updateSummary();
+      document.getElementById('itemQty').value = "";
     }
 
     function removeTransaction(ind) {
