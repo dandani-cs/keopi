@@ -450,7 +450,7 @@
         if(url_params.has("date_filter")) {
             datepicker.valueAsDate = new Date(url_params.get("date_filter"));
         } else {
-            datepicker.valueAsDate = new Date();
+            datepicker.valueAsDate = new Date('<?php $d = new DateTime(); print $d->format('Y-m-d');?>');
         }
 
         filter_form  = document.getElementById("filter_form");
