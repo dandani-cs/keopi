@@ -32,15 +32,16 @@
     $date_filter  = new DateTime();
     $date_filter  = $date_filter->format('Y-m-d');
     $range_filter = "daily";
-    $query = 'SELECT * FROM (SELECT transactions.*, orders.is_cancelled FROM transactions INNER JOIN orders on (transactions.order_num = orders.order_num)) AS transactions ' .
-        'INNER JOIN products prod on transactions.product_num = prod.product_num WHERE is_cancelled = 0 AND ';
+    $query = 'SELECT *, (qty * price) as total_sales FROM (SELECT transactions.* FROM transactions INNER JOIN orders on (transactions.order_num = orders.order_num)) AS tr ' .
+        'INNER JOIN products prod on tr.product_num = prod.product_num WHERE tr.cancelled = 0 AND ';
 
     $date_clause = 'transaction_date = DATE("' . $date_filter . '")';
     $is_monthly  = false;
     if (isset($_GET['date_filter']) && isset($_GET['range_filter'])) {
         if ($_GET['range_filter'] == 'daily') {
             $date_param  = new DateTime($_GET['date_filter']);
-            $date_clause = 'transaction_date = DATE("' . $date_param->format('Y-m-d') . '")';
+            $date_clause = 'CAST(transaction_date as DATE) = DATE("' . $date_param->format('Y-m-d') . '")';
+
         } else if ($_GET['range_filter'] == 'monthly') {
             $date_param  = new DateTime($_GET['date_filter']);
             $date_start  = clone $date_param;
@@ -50,21 +51,26 @@
             $date_start->modify('first day of this month');
             $date_end->modify('last day of this month');
 
-            $date_clause = 'transaction_date >= DATE("' . $date_start->format("Y-m-d") . '") ' .
-                'AND transaction_date <= DATE("' . $date_end->format("Y-m-d") . '")';
+            $date_clause = 'CAST(transaction_date AS DATE) >= DATE("' . $date_start->format("Y-m-d") . '") ' .
+                'AND CAST(transaction_date AS DATE) <= DATE("' . $date_end->format("Y-m-d") . '")';
         }
     }
     $query = $query . " " . $date_clause;
+    //print $query."<br/>";
     $filtered_data = get_filtered_data($query, $date_filter);
 
-    $sale_hist_query = 'SELECT transactions.transaction_date, products.product_num, products.name, COUNT(transactions.product_num) AS qty_sold, (COUNT(transactions.product_num) * price) as total_sales FROM transactions '.
-	                   'INNER JOIN products on transactions.product_num = products.product_num '.
-	                   'INNER JOIN orders on transactions.order_num = orders.order_num '.
-	                   'WHERE is_cancelled = 0 AND '.
-	                   $date_clause.' '.
-	                   'GROUP BY CAST(transaction_date AS DATE), transactions.product_num ORDER BY transaction_date;';
 
+    $sale_hist_query = 'SELECT  transactions.transaction_date, products.product_num, products.name, transactions.qty, products.price, (transactions.qty * products.price) as total_sales 
+                        FROM transactions 
+                        INNER JOIN products on transactions.product_num = products.product_num 
+                        INNER JOIN orders on transactions.order_num = orders.order_num 
+                        WHERE orders.cancelled = 0 AND '.$date_clause.' '.
+                        'GROUP BY CAST(transaction_date AS DATE), 
+                        transactions.product_num ORDER BY transaction_date;';
+
+    //  print $sale_hist_query;
     $sale_hist_data = get_filtered_data($sale_hist_query, $date_filter);
+    
 
     function print_daily_data()
     {
@@ -332,12 +338,8 @@
                                         $transact_date = new DateTime($transaction['transaction_date']);
                                         
 
-                                        if (isset($product_stats[$product_name])) {
-                                            $product_stats[$product_name]['qty']++;
-                                        } else {
-                                            //$sale_hist_data['name']
-
-                                            $product_stats[$product_name]['qty']   = 1;
+                                        if (!isset($product_stats[$product_name])) {
+                                            $product_stats[$product_name]['qty']    = $transaction['qty'];
                                             $product_stats[$product_name]['price']  = $transaction['price'];
                                         }
 
@@ -351,17 +353,16 @@
                                             $transaction['order_num'],
                                             $cancelled
                                         );
-                                        $qty_products_sold++;
+                                        $qty_products_sold += $transaction['qty'];
 
                                         // TODO: Incorporate transaction qty field
-                                        $total_sales += (float)($transaction['price']);
+                                        $total_sales += (float)($transaction['total_sales']);
                                     }
                                     print '</tbody></table>';
 
                                     foreach($sale_hist_data as $sales_hist)
                                     {
                                         $product_name  = $sales_hist['name'];
-                                        $qty_sold      = $sales_hist['qty_sold'];
                                         $product_sales = $sales_hist['total_sales'];
                                         $transact_date = $sales_hist['transaction_date'];
 
