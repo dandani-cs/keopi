@@ -26,7 +26,7 @@
 
   <div class="container-fluid" style="height:100%;">
     <div class="row gx-5">
-      <div class="col-sm-2 nav-col">
+      <div class="col-sm-2 nav-col" style="height:100vh;">
         <div class="profile-mini text-center">
           <img src="logo.png" class="rounded mx-auto d-block profile-pic title">
         </div>
@@ -54,12 +54,11 @@
 
       <div class="col-sm-6 main-content">
         <div class="heading">
-          <p>Today is...</p>
-          <h1>FRI, APRIL 12, 2022</h1>
+          <h1>ORDERS</h1>
         </div>
         <div class="row">
           <div class="col-sm-12 d-flex flex-row-reverse">
-            <a href="#"> <button type="button" name="button" class="btn btn-primary"> <i class="bi bi-plus-circle-fill"></i> Add transaction</button></a>
+            <a href="add-orders.php"> <button type="button" name="button" class="btn btn-primary"> <i class="bi bi-plus-circle-fill"></i> Add transaction</button></a>
           </div>
         </div>
         <div class="row">
@@ -104,7 +103,7 @@
                   <td class="align-middle">#' . $row["order_num"] . '</td>
                   <td class="align-middle">' . $row["customer_name"] . '</td>
                   <td class="align-middle">Php. ' . $row["total_amount"] . '</td>
-                  <td class="align-middle"> <button type="button" name="button" class="btn btn-primary"><i class="bi bi-pencil-fill"></i></button> <button type="button" name="button" class="btn btn-primary" onclick="cancel"><i class="bi bi-trash3-fill"></i></button> </td>
+                  <td class="align-middle"> <a href="cancel-orders.php?NUM=' . $row["order_num"] . '"> <button type="button" name="button" class="btn btn-primary"><i class="bi bi-x-circle-fill"></i></button></a> </td>
                 </tr>
                 ';
               }
@@ -124,7 +123,7 @@
           <div class="order-item">
             <div class="row">
               <div class="col-sm-12 order-header">
-                <h5> Order # <span id="orderNum">#2022456789</span> </h5>
+                <h5> Order # <span id="orderNum"></span> </h5>
               </div>
             </div>
             <div class="row">
@@ -152,7 +151,7 @@
                 <tbody id="orderItems">
                 </tbody>
               </table>
-              <p> <em>Special Instructions: Less ice on all</em>  </p>
+              <p>   </p>
             </div>
 
             <div class="row summary d-flex justify-content-end">
@@ -187,6 +186,7 @@
   <!-- Option 1: Bootstrap Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
   <script type="text/javascript">
+
     function showOrderDetails(orderNum, orderDate, totalQty, totalAmt, transactions) {
       document.getElementById("orderNum").innerHTML = orderNum;
       document.getElementById("orderDate").innerHTML = orderDate.split(" ")[0];
@@ -196,7 +196,7 @@
 
       document.getElementById('orderItems').innerHTML = "";
 
-      document.getElementById('cancelBtn').setAttribute("href", "/keopi/cancel_orders.php?NUM=" + orderNum);
+      document.getElementById('cancelBtn').setAttribute("href", "cancel_orders.php?NUM=" + orderNum);
 
       transactions.forEach((item, i) => {
         var text = '<tr><td class="align-middle"> <input type="text" name="transaction[]" value="' + item.name + '" disabled> </td><td class="align-middle"> <input type="number" name="prodQuantity[]" value="' + item.qty + '" disabled> </td></tr>';

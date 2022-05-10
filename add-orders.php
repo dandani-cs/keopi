@@ -23,9 +23,9 @@
 
    ?>
 
-  <div class="container-fluid" style="height:100%;">
+  <div class="container-fluid" style="height:100vh;">
     <div class="row gx-5">
-      <div class="col-sm-2 nav-col">
+      <div class="col-sm-2 nav-col" style="height:100vh;">
         <div class="profile-mini text-center">
           <img src="logo.png" class="rounded mx-auto d-block profile-pic title">
         </div>
@@ -54,11 +54,6 @@
       <div class="col-sm-6 main-content">
         <div class="heading">
           <h1>ADD ORDER</h1>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 d-flex flex-row-reverse">
-            <a href="#"> <button type="button" name="button" class="btn btn-primary"> <i class="bi bi-plus-circle-fill"></i> Add transaction</button></a>
-          </div>
         </div>
         <div class="row">
           <div class="col-sm-12">
@@ -248,6 +243,7 @@
       </tr>`;
       document.getElementById('orderItems').innerHTML += text;
       updateSummary();
+      document.getElementById('itemQty').value = "";
     }
 
     function removeTransaction(ind) {
