@@ -153,13 +153,18 @@
                 $transactionArray = rtrim($transactionArray, ',');
                 $transactionArray .= "]";
 
-                Print '<tr onclick=\'showOrderDetails("' . $row["order_num"] . '", "' . $row["order_date"] . '", "' . $row["quantity"] . '", "' . $row["total_amount"] . '", '. $transactionArray .')\'>
+                Print '<tr onclick=\'showOrderDetails("' . $row["order_num"] . '", "' . $row["order_date"] . '", "' . $row["quantity"] . '", "' . $row["total_amount"] . '", "' . $row["is_cancelled"] . '", '. $transactionArray .')\'>
                   <td class="align-middle">#' . $row["order_num"] . '</td>
                   <td class="align-middle">' . $row["customer_name"] . '</td>
-                  <td class="align-middle">Php. ' . $row["total_amount"] . '</td>
-                  <td class="align-middle"> <a href="cancel-orders.php?NUM=' . $row["order_num"] . '"> <button type="button" name="button" class="btn btn-primary"><i class="bi bi-x-circle-fill"></i></button></a> </td>
-                </tr>
-                ';
+                  <td class="align-middle">Php. ' . $row["total_amount"] . '</td>';
+
+                  if ($row["is_cancelled"] == 0) {
+                    Print '<td class="align-middle"> <a href="cancel-orders.php?NUM=' . $row["order_num"] . '"> <button type="button" name="button" class="btn btn-primary"><i class="bi bi-x-circle-fill"></i></button></a> </td>';
+                  } else {
+                    Print '<td class="align-middle"><button type="button" name="button" class="btn btn-primary cancelled" disabled><i class="bi bi-x-circle-fill"></i></button></td>';
+                  }
+
+                Print '</tr>';
               }
                ?>
             </table>
@@ -226,7 +231,7 @@
             </div>
             <div class="row d-flex justify-content-end">
               <div class="col-sm-6">
-                <a href="/keopi/cancel_orders.php?NUM=" id="cancelBtn"><button type="button" name="button" class="btn btn-primary"><i class="bi bi-x-circle-fill"></i> CANCEL ORDER</button></a>
+                <a href="/keopi/cancel_orders.php?NUM=" id="cancelBtn"><button type="button" name="button" class="btn btn-primary" id="checkCancelled"><i class="bi bi-x-circle-fill"></i> CANCEL ORDER</button></a>
               </div>
             </div>
           </div>
@@ -241,7 +246,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
   <script type="text/javascript">
 
-    function showOrderDetails(orderNum, orderDate, totalQty, totalAmt, transactions) {
+    function showOrderDetails(orderNum, orderDate, totalQty, totalAmt, is_cancelled, transactions) {
       document.getElementById("orderNum").innerHTML = orderNum;
       document.getElementById("orderDate").innerHTML = orderDate.split(" ")[0];
       document.getElementById("orderTime").innerHTML = orderDate.split(" ")[1];
@@ -250,7 +255,15 @@
 
       document.getElementById('orderItems').innerHTML = "";
 
-      document.getElementById('cancelBtn').setAttribute("href", "cancel_orders.php?NUM=" + orderNum);
+      if (is_cancelled == "1") {
+        document.getElementById('checkCancelled').disabled = true;
+        document.getElementById('cancelBtn').setAttribute("href", "#");
+      } else {
+        document.getElementById('checkCancelled').disabled = false;
+        document.getElementById('cancelBtn').setAttribute("href", "cancel_orders.php?NUM=" + orderNum);
+      }
+
+
 
       transactions.forEach((item, i) => {
         var text = '<tr><td class="align-middle"> <input type="text" name="transaction[]" value="' + item.name + '" disabled> </td><td class="align-middle"> <input type="number" name="prodQuantity[]" value="' + item.qty + '" disabled> </td></tr>';

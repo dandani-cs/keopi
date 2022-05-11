@@ -32,10 +32,10 @@
     $date_filter  = new DateTime();
     $date_filter  = $date_filter->format('Y-m-d');
     $range_filter = "daily";
-    $query = 'SELECT *, (qty * price) as total_sales FROM (SELECT transactions.transaction_num, transactions.qty, transactions.product_num, transactions.order_num, transactions.transaction_date, orders.cancelled FROM transactions INNER JOIN orders on (transactions.order_num = orders.order_num)) AS tr ' .
-        'INNER JOIN products prod on tr.product_num = prod.product_num WHERE tr.cancelled = 0 AND ';
+    $query = 'SELECT *, (qty * price) as total_sales FROM (SELECT transactions.transaction_num, transactions.qty, transactions.product_num, transactions.order_num, transactions.transaction_date, orders.is_cancelled FROM transactions INNER JOIN orders on (transactions.order_num = orders.order_num)) AS tr ' .
+        'INNER JOIN products prod on tr.product_num = prod.product_num WHERE tr.is_cancelled = 0 AND ';
 
-    $date_clause = 'transaction_date = DATE("' . $date_filter . '")';
+    $date_clause = 'CAST(transaction_date AS DATE) = DATE("' . $date_filter . '")';
     $is_monthly  = false;
     if (isset($_GET['date_filter']) && isset($_GET['range_filter'])) {
         if ($_GET['range_filter'] == 'daily') {
@@ -60,17 +60,17 @@
     $filtered_data = get_filtered_data($query, $date_filter);
 
 
-    $sale_hist_query = 'SELECT  transactions.transaction_date, products.product_num, products.name, transactions.qty, products.price, (transactions.qty * products.price) as total_sales 
-                        FROM transactions 
-                        INNER JOIN products on transactions.product_num = products.product_num 
-                        INNER JOIN orders on transactions.order_num = orders.order_num 
-                        WHERE orders.cancelled = 0 AND '.$date_clause.' '.
-                        'GROUP BY CAST(transaction_date AS DATE), 
+    $sale_hist_query = 'SELECT  transactions.transaction_date, products.product_num, products.name, transactions.qty, products.price, (transactions.qty * products.price) as total_sales
+                        FROM transactions
+                        INNER JOIN products on transactions.product_num = products.product_num
+                        INNER JOIN orders on transactions.order_num = orders.order_num
+                        WHERE orders.is_cancelled = 0 AND '.$date_clause.' '.
+                        'GROUP BY CAST(transaction_date AS DATE),
                         transactions.product_num ORDER BY transaction_date;';
 
     //  print $sale_hist_query;
     $sale_hist_data = get_filtered_data($sale_hist_query, $date_filter);
-    
+
 
     function print_daily_data()
     {
@@ -98,7 +98,7 @@
                         hoverOffset: 4,
                     }]
                 };
-        
+
                 const config = {
                     type: 'bar',
                     data: data,
@@ -129,8 +129,8 @@
                         }
                     }
                 };
-                
-                
+
+
                 ";
     }
 
@@ -149,7 +149,7 @@
             \'rgba(153, 102, 255, 1)\',
             \'rgba(201, 203, 207, 1)\'
         ]
-        
+
         datasets = [];
         for(var i = 0; i < sales_hist.length; i++) {
             hist_data = sales_hist[i];
@@ -231,7 +231,7 @@
             <div class="text-center pt-3 mb-3">
                 <img src="img/keopi-logo-transparent-black.png" style="width: 100%;" />
                 <div class="d-flex flex-column">
-            <?php 
+            <?php
             if($userRole == 1){
             print
             '
@@ -271,8 +271,8 @@
                 }
            ?>
 
-               
-                
+
+
             </div>
         </div>
       </div>
@@ -295,7 +295,7 @@
                                     <form action="reports_admin.php" id="filter_form" class="mb-0" method="GET">
                                         <input type="hidden" name="range_filter" id="range_filter" value="daily" onchange="this.form.submit();" />
                                         <input class="fw-light" name="date_filter" id="date_filter" type="date" style="border-radius: 4px; border: 1px solid #6c757d" onchange="this.form.submit();" />
-                                    </form>                                    
+                                    </form>
                                 </div>
 
                             </div>
@@ -304,7 +304,7 @@
                         <div class="round-bg">
                             <p class="h4 fw-regular text-color-brown mb-3"><?php print $is_monthly ? "Monthly" : "Daily" ?> Transactions</p>
                             <div class="mb-4">
-                                <?php 
+                                <?php
                                 if(!empty($filtered_data))
                                 {
                                     print ' <table class="table table-responsive table-hover">
@@ -318,12 +318,12 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>';
-                                    
+
                                     $qty_products_sold = 0;
                                     $total_sales       = 0;
                                     $product_stats     = array();
 
-                                    foreach ($filtered_data as $transaction) 
+                                    foreach ($filtered_data as $transaction)
                                     {
                                         $row_fmt = '<tr style="cursor: pointer;" onclick="select_row(\'%s\', \'%s\')">
                                                         <th scope="row">%s</th>
@@ -334,9 +334,9 @@
                                                     </tr>';
 
                                         $product_name  = $transaction['name'];
-                                        $cancelled     = $transaction['cancelled'] == 0 ? "No" : "Yes";
+                                        $cancelled     = $transaction['is_cancelled'] == 0 ? "No" : "Yes";
                                         $transact_date = new DateTime($transaction['transaction_date']);
-                                        
+
 
                                         if (!isset($product_stats[$product_name])) {
                                             $product_stats[$product_name]['qty']    = $transaction['qty'];
@@ -368,7 +368,7 @@
 
                                         if(!isset($product_stats[$product_name]['sales_hist']))
                                             $product_stats[$product_name]['sales_hist'] = array();
-                                        
+
                                         $product_stats[$product_name]['sales_hist'][] = array('date' => $transact_date, 'sales' => $product_sales);
                                     }
                                 } else
@@ -378,7 +378,7 @@
                                 }
                                 ?>
                             </div>
-                            
+
                             <?php
                                 if(!empty($filtered_data))
                                 {
@@ -404,11 +404,11 @@
                                 <h1 class="fw-bold mb-0 font-round" style="font-size: 2.25em;">PHP <?php print empty($filtered_data) ? "0.00" : number_format($total_sales, 2); ?></h1>
                                 <h3 class="lead" style="font-size: 1.25em;">Total sales</h3>
                             </div>
-                            
+
                             <hr />
                             <p id="no-selected-text" class="text-muted text-center">There is currently no product selected.</p>
                             <div id="select-info-container" class="flex-column justify-content-center mx-auto" style="display: none;">
-                                
+
                                 <div class="d-flex flex-row justify-content-between">
                                     <div>
                                         <p>Selected:</p>
@@ -480,9 +480,9 @@
 
         product_stat = <?php print !empty($filtered_data) ? json_encode($product_stats) : "{}" ?>;
         sales_hist   = Object.entries(product_stat).map((key, value) => key[1]).map(stat => stat.sales_hist);
-        
 
-        <?php 
+
+        <?php
             if(!empty($filtered_data))
             {
                 if($is_monthly)
@@ -494,11 +494,11 @@
 
         const myChart = new Chart(
             document.getElementById('myChart'),
-            config, 
+            config,
 
         );
 
-        function select_row(product_name, product_id) 
+        function select_row(product_name, product_id)
         {
             select_container = document.getElementById("select-info-container");
             selected_name    = document.getElementById("selected-name");
