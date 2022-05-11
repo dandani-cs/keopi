@@ -10,6 +10,9 @@
   $query = "UPDATE orders SET is_cancelled = 1 WHERE order_num = $order_num;";
   $results = mysqli_query($con, $query);
 
+  $query = "UPDATE transactions SET cancelled = 1 WHERE order_num = $order_num;";
+  $results = mysqli_query($con, $query);
+
   header("location: orders.php");
 
  ?>

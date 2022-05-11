@@ -15,7 +15,7 @@ $table_password = "";
 $role = 0;
 if($results != "") //IF there are no returning rows or no existing username
 {
-	Print '<script>alert("username fetched!");</script>'; 
+	Print '<script>alert("username fetched!");</script>';
 	while($row = mysqli_fetch_assoc($results)) //display all rows from query
 	{
 		$table_users = $row['email']; // the first username row is passed on to $table_users, and so on until the query is finished

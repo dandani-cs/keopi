@@ -36,8 +36,8 @@ $range_filter = "daily";
 $query = 'SELECT products.*, COUNT(transaction_num) AS num_sold FROM products LEFT JOIN ' .
     '(%s) t_list on (products.product_num = t_list.product_num) GROUP BY products.product_num ORDER BY product_num;';
 
-$transact_query = 'SELECT transactions.*, orders.is_cancelled FROM transactions INNER JOIN orders WHERE orders.is_cancelled = 0 AND';
-$date_clause    = 'transaction_date = DATE("' . $date_filter . '")';
+$transact_query = 'SELECT transactions.* FROM transactions INNER JOIN orders on transactions.order_num = orders.order_num WHERE orders.is_cancelled = 0 AND';
+$date_clause    = 'CAST(transaction_date AS DATE) = DATE("' . $date_filter . '")';
 
 if (isset($_GET['date_filter']) && isset($_GET['range_filter'])) {
     if ($_GET['range_filter'] == 'daily') {
@@ -62,7 +62,11 @@ $bestseller_query = 'SELECT products.*, COUNT(transaction_num) AS num_sold FROM 
     'GROUP BY products.product_num ORDER BY num_sold DESC LIMIT 3;';  // can be changed to top 5 or whatever
 
 $query = sprintf($query, $transact_query);
+<<<<<<< Updated upstream
 //print $query."<br/>".$bestseller_query;
+=======
+// print $query;
+>>>>>>> Stashed changes
 $filtered_data = get_filtered_data($query);
 $bestsellers   = get_filtered_data($bestseller_query);
 ?>
@@ -339,7 +343,7 @@ $bestsellers   = get_filtered_data($bestseller_query);
                             hoverOffset: 4,
                         }]
                     };
-            
+
                     const config = {
                         type: 'bar',
                         data: data,
@@ -370,8 +374,8 @@ $bestsellers   = get_filtered_data($bestseller_query);
                             }
                         }
                     };
-                    
-                    
+
+
                     ";
                 }
                 ?>
