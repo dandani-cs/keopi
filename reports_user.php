@@ -33,8 +33,8 @@ $date_filter  = new DateTime();
 $date_filter  = $date_filter->format('Y-m-d');
 $range_filter = "daily";
 
-$query = 'SELECT products.*, COUNT(transaction_num) AS num_sold FROM products LEFT JOIN ' .
-    '(%s) t_list on (products.product_num = t_list.product_num) GROUP BY products.product_num ORDER BY product_num;';
+$query = 'SELECT products.*, IFNULL(qty, 0) AS qty FROM products '.
+'LEFT JOIN (%s) t_list on products.product_num = t_list.product_num GROUP BY products.product_num;';
 
 $transact_query = 'SELECT transactions.* FROM transactions INNER JOIN orders on transactions.order_num = orders.order_num WHERE orders.is_cancelled = 0 AND';
 $date_clause    = 'CAST(transaction_date AS DATE) = DATE("' . $date_filter . '")';
@@ -42,7 +42,7 @@ $date_clause    = 'CAST(transaction_date AS DATE) = DATE("' . $date_filter . '")
 if (isset($_GET['date_filter']) && isset($_GET['range_filter'])) {
     if ($_GET['range_filter'] == 'daily') {
         $date_param  = new DateTime($_GET['date_filter']);
-        $date_clause = 'transaction_date = DATE("' . $date_param->format('Y-m-d') . '")';
+        $date_clause = 'CAST(transaction_date AS DATE) = DATE("' . $date_param->format('Y-m-d') . '")';
     } else if ($_GET['range_filter'] == 'monthly') {
         $date_param  = new DateTime($_GET['date_filter']);
         $date_start  = clone $date_param;
@@ -51,22 +51,18 @@ if (isset($_GET['date_filter']) && isset($_GET['range_filter'])) {
         $date_start->modify('first day of this month');
         $date_end->modify('last day of this month');
 
-        $date_clause = 'transaction_date >= DATE("' . $date_start->format("Y-m-d") . '") ' .
-            'AND transaction_date <= DATE("' . $date_end->format("Y-m-d") . '")';
+        $date_clause = 'CAST(transaction_date AS DATE) >= DATE("' . $date_start->format("Y-m-d") . '") ' .
+            'AND CAST(transaction_date AS DATE) <= DATE("' . $date_end->format("Y-m-d") . '")';
     }
 }
 $transact_query   = $transact_query . " " . $date_clause;
-$bestseller_query = 'SELECT products.*, COUNT(transaction_num) AS num_sold FROM products ' .
-    'INNER JOIN (SELECT transactions.*, is_cancelled FROM transactions INNER JOIN orders on transactions.order_num = orders.order_num ) tr ' .
-    'on (products.product_num = tr.product_num) WHERE tr.is_cancelled = 0 ' .
-    'GROUP BY products.product_num ORDER BY num_sold DESC LIMIT 3;';  // can be changed to top 5 or whatever
+$bestseller_query = 'SELECT products.*, qty FROM products ' .
+    'INNER JOIN (SELECT transactions.* FROM transactions INNER JOIN orders on transactions.order_num = orders.order_num ) tr ' .
+    'on (products.product_num = tr.product_num) WHERE tr.cancelled = 0 ' .
+    'GROUP BY products.product_num ORDER BY qty DESC LIMIT 3;';  // can be changed to top 5 or whatever
 
 $query = sprintf($query, $transact_query);
-<<<<<<< Updated upstream
-//print $query."<br/>".$bestseller_query;
-=======
 // print $query;
->>>>>>> Stashed changes
 $filtered_data = get_filtered_data($query);
 $bestsellers   = get_filtered_data($bestseller_query);
 ?>
@@ -219,11 +215,8 @@ $bestsellers   = get_filtered_data($bestseller_query);
                                                     </tr>';
 
 
-                                                if (isset($product_stats[$product['name']])) {
-                                                    $product_stats[$product['name']]['qty']++;
-                                                    $product_stats[$product['name']]['price'] += $product['price'];
-                                                } else {
-                                                    $product_stats[$product['name']]['qty']    = $product['num_sold'];
+                                                if (!isset($product_stats[$product['name']])) {
+                                                    $product_stats[$product['name']]['qty']    = $product['qty'];
                                                     $product_stats[$product['name']]['price']  = $product['price'];
                                                 }
 
@@ -233,7 +226,7 @@ $bestsellers   = get_filtered_data($bestseller_query);
                                                     $product['product_num'],
                                                     $product['name'],
                                                     number_format($product['price'], 2),
-                                                    $product['num_sold'],
+                                                    $product['qty'],
                                                     $product['is_available'] == 1 ? "Yes" : "No"
                                                 );
                                                 $qty_products_sold++;
@@ -269,7 +262,7 @@ $bestsellers   = get_filtered_data($bestseller_query);
                                         <h1 class="fw-bold font-round" style="font-size: 1.75em;">%s</h1>
                                         <h3 class="lead" style="font-size: 1em;">Bestseller #%s &#8211; %s sold</h3>
                                     </div>';
-                                        print sprintf($fmt, $product['name'], $idx, $product['num_sold']);
+                                        print sprintf($fmt, $product['name'], $idx, $product['qty']);
                                         $idx++;
                                     }
                                     ?>
@@ -288,8 +281,7 @@ $bestsellers   = get_filtered_data($bestseller_query);
                 if (url_params.has("date_filter")) {
                     datepicker.valueAsDate = new Date(url_params.get("date_filter"));
                 } else {
-                    datepicker.valueAsDate = new Date();
-                    console.log(datepicker.valueAsDate, new Date());
+                    datepicker.valueAsDate = new Date('<?php $d = new DateTime(); print $d->format('Y-m-d');?>');
                 }
 
                 filter_form = document.getElementById("filter_form");

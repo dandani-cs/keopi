@@ -87,9 +87,11 @@ $userRole = $_SESSION['is_admin']; //gets user role
         $name = ($_POST['product_name']);
         $price = ($_POST['product_price']);
         $description = ($_POST['product_desc']);
-
-
-        $con = mysqli_connect("localhost", "root", "", "keopidb") or die(mysqli_error()); //Connect to server
+        $db_name = "epiz_31692043_keopidb";
+        $db_username = "epiz_31692043";
+        $db_pass = "AVcoLaXFsz";
+        $db_host = "sql111.epizy.com";
+        $con = mysqli_connect("$db_host","$db_username","$db_pass", "$db_name") or die(mysqli_error()); //Connect to server
         $get_productNum = mysqli_query($con,"SELECT * FROM products WHERE product_num='$product_num'");
         $get_productName = mysqli_query($con,"SELECT * FROM products WHERE name='$name'");
 
